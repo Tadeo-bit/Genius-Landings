@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Friday TechStore 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .back-bar {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 32px;
+      font-size: 0.82rem;
+    }
+
+    .back-bar a { color: #2563eb; text-decoration: none; }
+    .back-bar a:hover { text-decoration: underline; }
+
+    .hero-dark {
+      background: #050505;
+      color: #fff;
+      text-align: center;
+      padding: 90px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-dark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(234,88,12,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-dark .event-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fb923c;
+      margin-bottom: 16px;
+    }
+
+    .hero-dark h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .hero-dark h1 em {
+      font-style: normal;
+      color: #fb923c;
+    }
+
+    .hero-dark .subtitle {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .hero-dark .offer-tag {
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fbbf24;
+      margin: 16px 0 32px;
+    }
+
+    .hero-dark .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-orange {
+      background: #ea580c;
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-orange:hover { background: #c2410c; }
+
+    .btn-ghost {
+      background: transparent;
+      color: #94a3b8;
+      padding: 14px 36px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1.5px solid #27272a;
+      transition: border-color 0.15s;
+    }
+
+    .btn-ghost:hover { border-color: #52525b; }
+
+    .deals-section {
+      padding: 64px 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .deals-section .label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #ea580c;
+      margin-bottom: 10px;
+    }
+
+    .deals-section h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 32px;
+    }
+
+    .deals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .deal-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .deal-card .discount {
+      display: inline-block;
+      background: #fef2f2;
+      color: #dc2626;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+    }
+
+    .deal-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .deal-card .price-now {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .deal-card .price-before {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      text-decoration: line-through;
+    }
+
+    .cta-section {
+      background: #0f172a;
+      color: #fff;
+      text-align: center;
+      padding: 64px 24px;
+    }
+
+    .cta-section h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .cta-section p {
+      color: #94a3b8;
+      margin-bottom: 28px;
+    }
+
+    .footer-dark {
+      background: #050505;
+      color: #475569;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.8rem;
+    }
+
+    .footer-dark a { color: #64748b; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="back-bar">
+    <a href="index.html">← Volver a TechStore</a>
+  </div>
+
+  <section class="hero">
+    <span class="event-label">Black Friday 2026</span>
+    <h1>Hasta <em>50% OFF</em><br>en toda la tienda</h1>
+    <p class="subtitle">Solo del 27 al 30 de noviembre</p>
+    <div class="offer-tag">Las mejores ofertas del año</div>
+    <div class="cta-group">
+      <a href="#ofertas" class="btn-orange">Ver ofertas</a>
+      <a href="#suscribir" class="btn-ghost">Quiero que me avisen</a>
+    </div>
+  </section>
+
+  <section class="deals-section" id="ofertas">
+    <p class="label">Selección de ofertas</p>
+    <h2>Productos destacados</h2>
+    <div class="deals-grid">
+      <div class="deal-card">
+        <span class="discount">-40%</span>
+        <h3>Smartphone X12 Pro</h3>
+        <div class="price-now">$329.990</div>
+        <div class="price-before">$549.990</div>
+      </div>
+      <div class="deal-card">
+        <span class="discount">-35%</span>
+        <h3>Auriculares NoiseBlast</h3>
+        <div class="price-now">$64.990</div>
+        <div class="price-before">$99.990</div>
+      </div>
+      <div class="deal-card">
+        <span class="discount">-50%</span>
+        <h3>Notebook UltraSlim 14</h3>
+        <div class="price-now">$589.990</div>
+        <div class="price-before">$1.179.990</div>
+      </div>
+      <div class="deal-card">
+        <span class="discount">-30%</span>
+        <h3>Tablet ProView 11</h3>
+        <div class="price-now">$219.990</div>
+        <div class="price-before">$314.990</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section" id="suscribir">
+    <h2>Registrate y recibí alertas</h2>
+    <p>Enterate antes que nadie cuando baje el precio de lo que querés.</p>
+    <a href="#" class="btn-orange">Suscribirme</a>
+  </section>
+
+  <footer class="footer-dark">
+    &copy; 2026 TechStore. Todos los derechos reservados. &mdash;
+    <a href="#">Política de privacidad</a>
+  </footer>
+
+</body>
+</html>
