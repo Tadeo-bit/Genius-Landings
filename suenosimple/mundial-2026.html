@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descansá como un campeón - SueñoSimple</title>
+    <style>
+  /* RESET BASE */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* BARRA DE RETORNO (La que me pasaste) */
+  .back-bar {
+    background-color: #f8fafc;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .back-bar a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #ffffff;
+  }
+
+  /* HERO SECTION (Azul oscuro como tu captura) */
+  .hero {
+    background-color: #0b1329; /* Ese azul profundo de la foto */
+    color: #ffffff;
+    padding: 60px 20px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  .hero p {
+    color: #cbd5e1;
+    max-width: 600px;
+    margin: 0 auto 25px auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  /* BOTONES (Azul brillante como el "Comprá ahora") */
+  .btn-cta, .btn-submit {
+    background-color: #2563eb;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-cta:hover, .btn-submit:hover {
+    background-color: #1d4ed8;
+  }
+
+  /* SECCIÓN FORMULARIO MATCH SALE */
+  .match-sale-section {
+    padding: 50px 20px;
+    background-color: #ffffff;
+    text-align: center;
+  }
+  .match-sale-section h2 {
+    color: #0b1329;
+    margin-bottom: 10px;
+  }
+  
+  /* ESTILOS DEL FORMULARIO */
+  #form-mundial {
+    max-width: 450px;
+    margin: 30px auto 0 auto;
+    background: #f8fafc;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    text-align: left;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #334155;
+    font-weight: 500;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+  .btn-submit {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* RESPONSIVE SIMPLE */
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 2rem; }
+    header { flex-direction: column; gap: 10px; }
+  }
+    </style>
+</head>
+<body>
+    <div class="back-bar">
+        <a href="index.html">← Volver a SueñoSimple</a>
+    </div>   
+
+    <header>
+        <img src="../img/logo-suenosimple.png" alt="Logo SueñoSimple" class="logo"> <!-- El logo del drive que optimizarás -->
+        <a href="https://wa.me/tu-numero" class="btn-whatsapp">Hablar por WhatsApp</a>[cite: 6]
+    </header>
+
+    <!-- SECCIÓN HERO: Primer impacto visual -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Descansá como un campeón para alentar a la selección.</h1>
+    <p>Dormir bien no debería ser un lujo, especialmente en meses de pasión mundialista. Aprovechá nuestras ofertas con precio honesto y entrega rápida.</p>
+    <a href="#registro" class="btn-cta">Quiero mi descuento mundial</a>[cite: 6]
+  </div>
+  <!-- Aquí va la imagen aspiracional optimizada de la familia viendo el partido -->
+</section>
+
+<!-- SECCIÓN DE CAPTACIÓN: Formulario Match Sale -->
+<section id="registro" class="match-sale-section">
+  <h2>¡Acceso Anticipado a las Ofertas Relámpago!</h2>[cite: 6]
+  <p>Registrate para recibir alertas exclusivas cada vez que juegue la selección y accedé a precios de fábrica antes que nadie.</p>[cite: 6]
+  
+  <!-- Formulario dinámico -->
+  <form id="form-mundial" novalidate>[cite: 6]
+    <div class="form-group">
+      <label for="nombre">Nombre completo:</label>
+      <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>[cite: 6]
+    </div>
+    
+    <div class="form-group">
+      <label for="email">Correo Electrónico:</label>
+      <input type="email" id="email" name="email" placeholder="Ej: juan@mail.com" required>[cite: 6]
+    </div>
+    
+    <div class="form-group">
+      <label for="whatsapp">WhatsApp (Celular):</label>
+      <input type="tel" id="whatsapp" name="whatsapp" placeholder="Ej: 1123456789" required>[cite: 6]
+    </div>
+    
+    <button type="submit" class="btn-submit">Registrarme ya</button>
+  </form>
+  
+  <!-- Contenedor invisible para el feedback visual que trabajaré mañana -->
+  <div id="form-feedback" class="hidden"></div>
+</section>
+
+</body>
+</html>
