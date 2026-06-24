@@ -19,50 +19,133 @@
       <p>Seleccioná un cliente para ver y gestionar sus landing pages.</p>
     </div>
 
-    <div class="client-grid">
-
-      <div class="client-card">
-        <div class="client-card-top">
-          <div class="client-avatar av-blue">SS</div>
-          <span class="client-industry">Colchones</span>
-        </div>
-        <h2>SueñoSimple</h2>
-        <p>Marca argentina de colchones de entrada y gama media. Foco en campañas estacionales: Hot Sale, Black Friday y fechas especiales.</p>
-        <span class="client-stat">2 landings</span>
-        <br>
-        <a href="suenosimple/index.html" class="btn btn-primary">Ver landings</a>
-      </div>
-
-      <div class="client-card">
-        <div class="client-card-top">
-          <div class="client-avatar av-slate">TS</div>
-          <span class="client-industry">Tecnología</span>
-        </div>
-        <h2>TechStore</h2>
-        <p>Retailer de electrónica y accesorios tecnológicos. Activo en campañas de descuento y lanzamientos de producto durante todo el año.</p>
-        <span class="client-stat">2 landings</span>
-        <br>
-        <a href="techstore/index.html" class="btn btn-primary">Ver landings</a>
-      </div>
-
-      <div class="client-card">
-        <div class="client-card-top">
-          <div class="client-avatar av-rose">ML</div>
-          <span class="client-industry">Moda</span>
-        </div>
-        <h2>ModaLatam</h2>
-        <p>Marca de indumentaria femenina con presencia en Argentina, Chile y Colombia. Campañas orientadas a colecciones estacionales y eventos de descuento.</p>
-        <span class="client-stat">2 landings</span>
-        <br>
-        <a href="modalatam/index.html" class="btn btn-primary">Ver landings</a>
-      </div>
-
-    </div>
+    <div id="status-msg" style="color:#64748b;font-size:.9rem;">Cargando clientes desde APIs...</div>
+    <div id="client-grid" class="client-grid" style="display:none;"></div>
   </main>
 
   <footer class="site-footer">
     Genius Agency &mdash; Uso interno. No compartir fuera del equipo.
   </footer>
+
+  <script>
+    const BUDGET_API_URL = 'http://localhost:8080/api/campaigns';
+    const CRM_API_URL = 'http://localhost:3000/api/landings';
+
+    function normalize(value) {
+      return (value || '')
+        .toString()
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ');
+    }
+
+    function inferFolder(clientName) {
+      return normalize(clientName).replace(/\s+/g, '-');
+    }
+
+    function initials(clientName) {
+      const parts = (clientName || '').split(/\s+/).filter(Boolean);
+      if (parts.length === 0) return 'CL';
+      if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+
+    function renderClients(catalog) {
+      const grid = document.getElementById('client-grid');
+      const status = document.getElementById('status-msg');
+
+      if (catalog.length === 0) {
+        status.textContent = 'No hay clientes disponibles desde las APIs.';
+        return;
+      }
+
+      const cards = catalog.map(client => {
+        const folder = inferFolder(client.name);
+        const landingText = `${client.landings} landing${client.landings === 1 ? '' : 's'}`;
+        const campaignText = `${client.campaigns} campaña${client.campaigns === 1 ? '' : 's'}`;
+        return `
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-avatar av-blue">${initials(client.name)}</div>
+              <span class="client-industry">Desde APIs</span>
+            </div>
+            <h2>${client.name}</h2>
+            <p>Datos sincronizados desde Budget Manager y Landing CRM.</p>
+            <span class="client-stat">${landingText} · ${campaignText}</span>
+            <br>
+            <a href="${folder}/index.html" class="btn btn-primary">Ver landings</a>
+          </div>
+        `;
+      }).join('');
+
+      grid.innerHTML = cards;
+      status.style.display = 'none';
+      grid.style.display = 'grid';
+    }
+
+    async function loadClients() {
+      const status = document.getElementById('status-msg');
+      try {
+        const [campaignsReq, landingsReq] = await Promise.allSettled([
+          fetch(BUDGET_API_URL),
+          fetch(CRM_API_URL)
+        ]);
+
+        let campaigns = [];
+        let landings = [];
+        const warnings = [];
+
+        if (campaignsReq.status === 'fulfilled' && campaignsReq.value.ok) {
+          campaigns = await campaignsReq.value.json();
+        }
+
+        if (landingsReq.status === 'fulfilled' && landingsReq.value.ok) {
+          landings = await landingsReq.value.json();
+        } else {
+          warnings.push('Landing CRM no disponible desde esta página.');
+        }
+
+        if (campaigns.length === 0 && landings.length === 0) {
+          throw new Error('No se pudo consultar ninguna API.');
+        }
+
+        const map = new Map();
+
+        campaigns.forEach(item => {
+          const name = (item.client || '').trim();
+          const key = normalize(name);
+          if (!key) return;
+          if (!map.has(key)) map.set(key, { name, landings: 0, campaigns: 0 });
+          map.get(key).campaigns += 1;
+        });
+
+        landings.forEach(item => {
+          const name = (item.client || '').trim();
+          const key = normalize(name);
+          if (!key) return;
+          if (!map.has(key)) map.set(key, { name, landings: 0, campaigns: 0 });
+          map.get(key).landings += 1;
+        });
+
+        const catalog = Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+        renderClients(catalog);
+
+        if (warnings.length > 0) {
+          status.style.display = 'block';
+          status.style.color = '#92400e';
+          status.textContent = warnings.join(' ');
+        }
+      } catch (error) {
+        status.style.color = '#dc2626';
+        status.textContent = `Error al cargar datos desde APIs: ${error.message}`;
+      }
+    }
+
+    loadClients();
+  </script>
 
 </body>
 </html>

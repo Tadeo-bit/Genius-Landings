@@ -1,16 +1,9 @@
 <?php
 require_once 'api.php';
 
-// Clientes registrados en el panel (fuente de verdad local)
-// TODO GL-F07: reemplazar este array por un CRUD real (formulario de alta/baja de clientes)
-$clientes = [
-    ['id' => 1, 'nombre' => 'SueñoSimple', 'carpeta' => 'suenosimple'],
-    ['id' => 2, 'nombre' => 'TechStore',   'carpeta' => 'techstore'],
-    ['id' => 3, 'nombre' => 'ModalAtam',   'carpeta' => 'modalatam'],
-];
-
 $campaigns = get_campaigns();
 $landings  = get_landings();
+$clientes  = build_clients_catalog($campaigns, $landings);
 
 $script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
 $base_path = rtrim($script_dir, '/');
@@ -72,6 +65,12 @@ function count_campaigns_for(array $campaigns, string $client): int {
 
     <?php if (empty($landings) && empty($campaigns)): ?>
       <p style="margin-top:20px;color:#dc3545;">⚠ No se pudo conectar con las APIs. Verificá que Budget Manager (puerto 8080) y Landing CRM (puerto 3000) estén corriendo.</p>
+    <?php endif; ?>
+
+    <?php if (!empty($campaigns) || !empty($landings)): ?>
+      <?php if (empty($clientes)): ?>
+        <p style="margin-top:20px;color:#dc3545;">⚠ Las APIs respondieron, pero no se encontraron clientes con datos de campañas o landings.</p>
+      <?php endif; ?>
     <?php endif; ?>
 
     <div class="admin-grid">

@@ -65,3 +65,48 @@ function get_landings(?string $client = null): array {
 function get_leads(int $landing_id): array {
     return api_get(LANDING_CRM_URL . '/api/landings/' . $landing_id . '/leads');
 }
+
+function infer_client_folder(string $client_name): string {
+    $normalized = normalize_text($client_name);
+    return str_replace(' ', '-', $normalized);
+}
+
+function canonical_client_name(string $client_name): string {
+    return trim($client_name);
+}
+
+function build_clients_catalog(array $campaigns, array $landings): array {
+    $catalog = [];
+
+    $sources = array_merge($campaigns, $landings);
+    foreach ($sources as $item) {
+        $raw_client = trim((string)($item['client'] ?? ''));
+        if ($raw_client === '') {
+            continue;
+        }
+
+        $key = normalize_text($raw_client);
+        if ($key === '') {
+            continue;
+        }
+
+        if (!isset($catalog[$key])) {
+            $catalog[$key] = [
+                'id' => count($catalog) + 1,
+                'nombre' => canonical_client_name($raw_client),
+                'carpeta' => infer_client_folder($raw_client),
+            ];
+        }
+    }
+
+    usort($catalog, function ($a, $b) {
+        return strcmp(normalize_text($a['nombre']), normalize_text($b['nombre']));
+    });
+
+    // Reindexar IDs luego del ordenamiento.
+    foreach ($catalog as $index => $client) {
+        $catalog[$index]['id'] = $index + 1;
+    }
+
+    return $catalog;
+}
