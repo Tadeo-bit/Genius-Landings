@@ -239,5 +239,75 @@
   <a href="#">Política de privacidad</a>
 </footer>
 
+<script>
+  // 1. Captura del formulario
+  const formulario = document.getElementById('form-mundial');
+
+  // 2. Escucha del evento de "Submit" (cuando aprietan el botón)
+  formulario.addEventListener('submit', function(event) {
+    // Frenamos el envío por defecto para validar primero
+    event.preventDefault();
+
+    // Limpieza de errores viejos antes de volver a validar
+    limpiarErrores();
+
+    // Captura de los valores de los inputs
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+
+    let tieneErrores = false;
+
+    // 3. Validamos el campo Nombre
+    if (nombre === '') {
+      mostrarError('nombre', 'Por favor, ingresá tu nombre completo.');
+      tieneErrores = true;
+    }
+
+    // 4. Validamos el campo Email 
+    if (email === '' || !email.includes('@')) {
+      mostrarError('email', 'Ingresá un correo electrónico válido.');
+      tieneErrores = true;
+    }
+
+    // 5. Validamos el campo WhatsApp
+    if (whatsapp === '') {
+      mostrarError('whatsapp', 'El número de WhatsApp es obligatorio.');
+      tieneErrores = true;
+    }
+
+    // Si todo está perfecto, acá procesaremos el envío mañana
+    if (!tieneErrores) {
+      alert('¡Validación exitosa! Mañana nos conectamos al CRM.'); 
+      // Nota: Este alert es solo para que pruebes hoy en tu máquina, mañana lo borramos.
+    }
+  });
+
+  // Inyecta el error dinámicamente en el HTML
+  function mostrarError(idInput, mensaje) {
+    const input = document.getElementById(idInput);
+    input.classList.add('input-error'); // Le pone el borde rojo de CSS
+
+    // Creamos el parrafo rojo sobre la marcha
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerText = mensaje;
+
+    // Lo metemos justo abajo del input correspondiente
+    input.parentElement.appendChild(errorDiv);
+  }
+
+  // FUNCIÓN DOCENTE: Limpia el rastro del intento anterior
+  function limpiarErrores() {
+    // Sacamos los bordes rojos
+    const inputsConError = document.querySelectorAll('.input-error');
+    inputsConError.forEach(input => input.classList.remove('input-error'));
+
+    // Borramos los textos rojos del HTML
+    const mensajes = document.querySelectorAll('.error-message');
+    mensajes.forEach(msg => msg.remove());
+  }
+</script>
+
 </body>
 </html>
