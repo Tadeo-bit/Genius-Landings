@@ -160,6 +160,23 @@
     border-color: #dc2626 !important;
   }
 
+  /* FEEDBACK DEL FORMULARIO */
+  #form-feedback {
+    max-width: 450px;
+    margin: 16px auto 0 auto;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: .93rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  #form-feedback.hidden { display: none; }
+  #form-feedback.exito  { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+  #form-feedback.error  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+  /* Estado del botón mientras envía */
+  .btn-submit:disabled { background-color: #93c5fd; cursor: not-allowed; }
+
   .footer {
   background: #0f172a;
   color: #64748b;
@@ -230,83 +247,94 @@
     <button type="submit" class="btn-submit">Registrarme ya</button>
   </form>
   
-  <!-- Contenedor invisible para el feedback visual que trabajaré mañana -->
-  <div id="form-feedback" class="hidden"></div>
+  <!-- Feedback visual tras el envío -->
+  <div id="form-feedback" class="hidden" role="alert" aria-live="polite"></div>
 </section>
 
 <footer class="footer">
   &copy; 2026 SueñoSimple. Todos los derechos reservados. &mdash;
   <a href="#">Política de privacidad</a>
 </footer>
-
 <script>
-  // 1. Captura del formulario
-  const formulario = document.getElementById('form-mundial');
+  // ─── Integración con Landing CRM ────────────────────────────────────────
+  // Endpoint: POST /api/landings/:id/leads
+  // La landing "Captación leads - Newsletter SuenoSimple" tiene id 3 en el CRM.
+  const LANDING_CRM_URL = 'http://localhost:3000';
+  const LANDING_ID      = 3;
 
-  // 2. Escucha del evento de "Submit" (cuando aprietan el botón)
-  formulario.addEventListener('submit', function(event) {
-    // Frenamos el envío por defecto para validar primero
-    event.preventDefault();
+  const form     = document.getElementById('form-mundial');
+  const feedback = document.getElementById('form-feedback');
+  const btnEnviar = form.querySelector('button[type="submit"]');
 
-    // Limpieza de errores viejos antes de volver a validar
-    limpiarErrores();
+  function mostrarFeedback(tipo, mensaje) {
+    feedback.className = tipo;          // 'exito' | 'error'
+    feedback.textContent = mensaje;
+    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
-    // Captura de los valores de los inputs
-    const nombre = document.getElementById('nombre').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
+  function validarFormulario(nombre, email, telefono) {
+    if (!nombre.trim())              return 'El nombre es obligatorio.';
+    if (!email.trim())               return 'El correo electrónico es obligatorio.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+                                     return 'El correo electrónico no es válido.';
+    if (!telefono.trim())            return 'El WhatsApp es obligatorio.';
+    if (!/^\d{6,15}$/.test(telefono.replace(/[\s\-+()]/g, '')))
+                                     return 'El número de WhatsApp no es válido (solo dígitos, 6-15 caracteres).';
+    return null;
+  }
 
-    let tieneErrores = false;
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-    // 3. Validamos el campo Nombre
-    if (nombre === '') {
-      mostrarError('nombre', 'Por favor, ingresá tu nombre completo.');
-      tieneErrores = true;
+    const nombre   = document.getElementById('nombre').value;
+    const email    = document.getElementById('email').value;
+    const telefono = document.getElementById('whatsapp').value;
+
+    // Validación en cliente antes de llamar a la API
+    const errorValidacion = validarFormulario(nombre, email, telefono);
+    if (errorValidacion) {
+      mostrarFeedback('error', errorValidacion);
+      return;
     }
 
-    // 4. Validamos el campo Email 
-    if (email === '' || !email.includes('@')) {
-      mostrarError('email', 'Ingresá un correo electrónico válido.');
-      tieneErrores = true;
-    }
+    // Bloquear botón mientras se procesa
+    btnEnviar.disabled    = true;
+    btnEnviar.textContent = 'Enviando...';
 
-    // 5. Validamos el campo WhatsApp
-    if (whatsapp === '') {
-      mostrarError('whatsapp', 'El número de WhatsApp es obligatorio.');
-      tieneErrores = true;
-    }
+    try {
+      const respuesta = await fetch(
+        `${LANDING_CRM_URL}/api/landings/${LANDING_ID}/leads`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name:    nombre.trim(),
+            email:   email.trim(),
+            phone:   telefono.trim(),
+            message: null
+          })
+        }
+      );
 
-    // Si todo está perfecto, acá procesaremos el envío mañana
-    if (!tieneErrores) {
-      alert('¡Validación exitosa! Mañana nos conectamos al CRM.'); 
-      // Nota: Este alert es solo para que pruebes hoy en tu máquina, mañana lo borramos.
+      if (!respuesta.ok) {
+        const datos = await respuesta.json().catch(() => ({}));
+        throw new Error(datos.error || `Error del servidor (${respuesta.status})`);
+      }
+
+      // Registro exitoso
+      form.reset();
+      form.style.display = 'none';
+      mostrarFeedback('exito', '¡Listo! Te avisamos antes de cada partido. Revisá tu correo.');
+
+    } catch (err) {
+      mostrarFeedback('error', err.message === 'Failed to fetch'
+        ? 'No se pudo conectar con el sistema. Intentá de nuevo en unos segundos.'
+        : err.message
+      );
+      btnEnviar.disabled    = false;
+      btnEnviar.textContent = 'Registrarme ya';
     }
   });
-
-  // Inyecta el error dinámicamente en el HTML
-  function mostrarError(idInput, mensaje) {
-    const input = document.getElementById(idInput);
-    input.classList.add('input-error'); // Le pone el borde rojo de CSS
-
-    // Creamos el parrafo rojo sobre la marcha
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.innerText = mensaje;
-
-    // Lo metemos justo abajo del input correspondiente
-    input.parentElement.appendChild(errorDiv);
-  }
-
-  // FUNCIÓN DOCENTE: Limpia el rastro del intento anterior
-  function limpiarErrores() {
-    // Sacamos los bordes rojos
-    const inputsConError = document.querySelectorAll('.input-error');
-    inputsConError.forEach(input => input.classList.remove('input-error'));
-
-    // Borramos los textos rojos del HTML
-    const mensajes = document.querySelectorAll('.error-message');
-    mensajes.forEach(msg => msg.remove());
-  }
 </script>
 
 </body>

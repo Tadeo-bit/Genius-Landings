@@ -7,6 +7,15 @@ require_once 'api.php';
 
 $cliente  = $_GET['cliente'] ?? '';
 $landings = $cliente ? get_landings($cliente) : [];
+
+if ($cliente && !empty($landings)) {
+  $expected_client = normalize_text($cliente);
+  $landings = array_values(array_filter($landings, function ($landing) use ($expected_client) {
+    $candidate_client = normalize_text((string)($landing['client'] ?? ''));
+    return $candidate_client === $expected_client;
+  }));
+}
+
 $leads_by_landing = [];
 
 // TODO GL-F09: cargar conteo de leads por landing desde el Landing CRM
