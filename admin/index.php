@@ -1,23 +1,30 @@
 <?php
 require_once 'api.php';
 
-// Clientes registrados en el panel (fuente de verdad local)
-// TODO GL-F07: reemplazar este array por un CRUD real (formulario de alta/baja de clientes)
-$clientes = [
-    ['id' => 1, 'nombre' => 'SueñoSimple', 'carpeta' => 'suenosimple'],
-    ['id' => 2, 'nombre' => 'TechStore',   'carpeta' => 'techstore'],
-    ['id' => 3, 'nombre' => 'ModalAtam',   'carpeta' => 'modalatam'],
-];
-
 $campaigns = get_campaigns();
 $landings  = get_landings();
+$clientes  = build_clients_catalog($campaigns, $landings);
+
+$script_dir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
+$base_path = rtrim($script_dir, '/');
+if ($base_path === '' || $base_path === '.') {
+  $base_path = '';
+}
 
 function count_landings_for(array $landings, string $client): int {
-    return count(array_filter($landings, fn($l) => strcasecmp($l['client'] ?? '', $client) === 0));
+  $expected = normalize_text($client);
+  return count(array_filter($landings, function ($landing) use ($expected) {
+    $candidate = normalize_text((string)($landing['client'] ?? ''));
+    return $candidate === $expected;
+  }));
 }
 
 function count_campaigns_for(array $campaigns, string $client): int {
-    return count(array_filter($campaigns, fn($c) => strcasecmp($c['client'] ?? '', $client) === 0));
+  $expected = normalize_text($client);
+  return count(array_filter($campaigns, function ($campaign) use ($expected) {
+    $candidate = normalize_text((string)($campaign['client'] ?? ''));
+    return $candidate === $expected;
+  }));
 }
 ?>
 <!DOCTYPE html>
@@ -60,6 +67,12 @@ function count_campaigns_for(array $campaigns, string $client): int {
       <p style="margin-top:20px;color:#dc3545;">⚠ No se pudo conectar con las APIs. Verificá que Budget Manager (puerto 8080) y Landing CRM (puerto 3000) estén corriendo.</p>
     <?php endif; ?>
 
+    <?php if (!empty($campaigns) || !empty($landings)): ?>
+      <?php if (empty($clientes)): ?>
+        <p style="margin-top:20px;color:#dc3545;">⚠ Las APIs respondieron, pero no se encontraron clientes con datos de campañas o landings.</p>
+      <?php endif; ?>
+    <?php endif; ?>
+
     <div class="admin-grid">
       <?php foreach ($clientes as $c): ?>
         <?php
@@ -72,8 +85,8 @@ function count_campaigns_for(array $campaigns, string $client): int {
             <?= $total_landings ?> landing<?= $total_landings !== 1 ? 's' : '' ?> ·
             <?= $total_campaigns ?> campaña<?= $total_campaigns !== 1 ? 's' : '' ?>
           </div>
-          <a href="landings.php?cliente=<?= urlencode($c['nombre']) ?>" class="btn btn-primary">Gestionar landings</a>
-          <a href="../<?= $c['carpeta'] ?>/index.html" class="btn btn-secondary">Ver panel</a>
+          <a href="<?= $base_path ?>/landings.php?cliente=<?= urlencode($c['nombre']) ?>" class="btn btn-primary">Gestionar landings</a>
+          <a href="<?= $base_path ?>/panel.php?carpeta=<?= urlencode($c['carpeta']) ?>" class="btn btn-secondary">Ver panel</a>
         </div>
       <?php endforeach; ?>
     </div>

@@ -30,26 +30,96 @@
 
     <p class="section-label">Landings publicadas</p>
 
-    <div class="landing-grid">
-
-      <div class="landing-card">
-        <div class="landing-card-top">
-          <div>
-            <h3>Economica Pro — Lanzamiento</h3>
-            <span class="landing-type">Lanzamiento de producto</span>
-          </div>
-          <span class="badge badge-active">Activa</span>
-        </div>
-        <p class="landing-date">Publicada el 10 mar 2026</p>
-        <a href="landing-economica-pro.html" class="btn btn-outline">Ver landing</a>
-      </div>
-
-    </div>
+    <p id="landing-status" style="color:#64748b;font-size:.9rem;">Cargando landings desde Landing CRM...</p>
+    <div id="landing-grid" class="landing-grid" style="display:none;"></div>
   </main>
 
   <footer class="site-footer">
     Genius Agency &mdash; Uso interno. No compartir fuera del equipo.
   </footer>
+
+  <script>
+    const CLIENT_KEY = 'suenosimple';
+    const CRM_API_URL = 'http://localhost:3000/api/landings';
+
+    function normalize(value) {
+      return (value || '')
+        .toString()
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ');
+    }
+
+    function statusLabel(status) {
+      if (status === 'active') return 'Activa';
+      if (status === 'draft') return 'Borrador';
+      if (status === 'inactive') return 'Inactiva';
+      return status || '—';
+    }
+
+    function statusClass(status) {
+      if (status === 'active') return 'badge-active';
+      if (status === 'draft') return 'badge-draft';
+      return 'badge-inactive';
+    }
+
+    function landingHref(landingName) {
+      const key = normalize(landingName);
+      const routes = {
+        'hot sale 2026 suenosimple': 'hot-sale-2026.html',
+        'lanzamiento economica pro 2026': 'economica-pro.html',
+        'captacion leads newsletter suenosimple': 'mundial-2026.html',
+        'mundial 2026 suenosimple': 'mundial-2026.html',
+        'dia de las madres suenosimple': 'dia-madres.html'
+      };
+      return routes[key] || '#';
+    }
+
+    async function loadLandings() {
+      const status = document.getElementById('landing-status');
+      const grid = document.getElementById('landing-grid');
+
+      try {
+        const response = await fetch(CRM_API_URL);
+        if (!response.ok) {
+          throw new Error(`Landing CRM: ${response.status}`);
+        }
+
+        const allLandings = await response.json();
+        const landings = allLandings.filter(item => normalize(item.client) === CLIENT_KEY);
+
+        if (landings.length === 0) {
+          status.textContent = 'No hay landings disponibles para este cliente en la API.';
+          return;
+        }
+
+        grid.innerHTML = landings.map(item => `
+          <div class="landing-card">
+            <div class="landing-card-top">
+              <div>
+                <h3>${item.name || 'Sin nombre'}</h3>
+                <span class="landing-type">ID API: ${item.id ?? '—'}</span>
+              </div>
+              <span class="badge ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+            </div>
+            <p class="landing-date">Fuente: Landing CRM</p>
+            <a href="${landingHref(item.name || '')}" class="btn btn-outline">Ver landing</a>
+          </div>
+        `).join('');
+
+        status.style.display = 'none';
+        grid.style.display = 'grid';
+      } catch (error) {
+        status.style.color = '#dc2626';
+        status.textContent = `Error al cargar landings desde API: ${error.message}`;
+      }
+    }
+
+    loadLandings();
+  </script>
 
 </body>
 </html>
