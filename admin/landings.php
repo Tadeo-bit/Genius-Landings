@@ -28,9 +28,10 @@ $mensaje_tipo = 'ok'; // 'ok' | 'error'
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre   = trim($_POST['nombre']   ?? '');
+  $archivo  = trim($_POST['archivo']  ?? '');
     $template = trim($_POST['template'] ?? '');
 
-    if ($nombre && $template && $cliente) {
+  if ($nombre && $archivo && $template && $cliente) {
         $template_ids = ['promo-event' => 1, 'lead-capture' => 3, 'product-launch' => 2];
         $template_id  = $template_ids[$template] ?? 1;
 
@@ -38,7 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name'       => $nombre,
             'client'     => $cliente,
             'templateId' => $template_id,
-            'fields'     => []
+      'fields'     => [
+        'fileName' => $archivo
+      ]
         ]);
 
         $context = stream_context_create([
@@ -61,14 +64,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($response !== false && $http_code === 201) {
             $created = json_decode($response, true);
-            $mensaje = "Landing '{$created['name']}' creada en Landing CRM con ID {$created['id']}.";
+          $mensaje = "Landing '{$created['name']}' creada en Landing CRM con ID {$created['id']} y archivo sugerido '{$archivo}'.";
         } else {
             $mensaje_tipo = 'error';
             $mensaje = "Error al crear la landing en Landing CRM (HTTP $http_code). Verificá que el servidor esté corriendo.";
         }
     } else {
         $mensaje_tipo = 'error';
-        $mensaje = 'Error: nombre, template y cliente son obligatorios.';
+        $mensaje = 'Error: nombre, archivo, template y cliente son obligatorios.';
     }
 }
 ?>
@@ -159,6 +162,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="field">
             <label>Nombre de la landing</label>
             <input type="text" name="nombre" placeholder="Ej: Hot Sale 2026" required>
+          </div>
+          <div class="field">
+            <label>Nombre del archivo (sin espacios, sin .html)</label>
+            <input type="text" name="archivo" placeholder="Ej: hot-sale-2026" required>
           </div>
           <div class="field">
             <label>Template</label>

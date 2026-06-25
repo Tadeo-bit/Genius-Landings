@@ -46,6 +46,16 @@
       return normalize(clientName).replace(/\s+/g, '-');
     }
 
+    function displayClientName(clientName) {
+      const key = normalize(clientName);
+      const aliases = {
+        'suenosimple': 'SueñoSimple',
+        'techstore': 'TechStore',
+        'modalatam': 'ModaLatam'
+      };
+      return aliases[key] || clientName;
+    }
+
     function initials(clientName) {
       const parts = (clientName || '').split(/\s+/).filter(Boolean);
       if (parts.length === 0) return 'CL';
@@ -118,7 +128,7 @@
           const name = (item.client || '').trim();
           const key = normalize(name);
           if (!key) return;
-          if (!map.has(key)) map.set(key, { name, landings: 0, campaigns: 0 });
+          if (!map.has(key)) map.set(key, { name: displayClientName(name), landings: 0, campaigns: 0 });
           map.get(key).campaigns += 1;
         });
 
@@ -126,7 +136,7 @@
           const name = (item.client || '').trim();
           const key = normalize(name);
           if (!key) return;
-          if (!map.has(key)) map.set(key, { name, landings: 0, campaigns: 0 });
+          if (!map.has(key)) map.set(key, { name: displayClientName(name), landings: 0, campaigns: 0 });
           map.get(key).landings += 1;
         });
 
