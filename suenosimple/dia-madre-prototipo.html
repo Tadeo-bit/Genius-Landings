@@ -127,7 +127,7 @@
 
     let tieneErrores = false;
 
-    // 3. Validaciones de Frontend obligatorias
+    // 3. Validaciones de Frontend obligatorias (Solo nombre y mail según el contrato)
     if (nombre === '') {
       document.getElementById('error-nombre').classList.remove('hidden');
       tieneErrores = true;
@@ -136,10 +136,14 @@
       document.getElementById('error-mail').classList.remove('hidden');
       tieneErrores = true;
     }
+
+    // COMENTAMOS la validación del celular porque el PDF dice que es OPCIONAL
+    /*
     if (celular === '') {
       document.getElementById('error-celular').classList.remove('hidden');
       tieneErrores = true;
     }
+    */
 
     // 4. Si hay errores, frenamos la ejecución
     if (tieneErrores) return;
