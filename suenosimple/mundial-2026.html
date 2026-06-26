@@ -240,72 +240,130 @@
 </footer>
 
 <script>
-  // 1. Captura del formulario
+  // 1. Captura del formulario y feedback 
   const formulario = document.getElementById('form-mundial');
+  // Simulamos el ID de la campaña del Mundial (ej: ID 7)
+  const LANDING_ID = 6; 
+  const API_BASE_URL = 'http://localhost:3000';
 
-  // 2. Escucha del evento de "Submit" (cuando aprietan el botón)
-  formulario.addEventListener('submit', function(event) {
-    // Frenamos el envío por defecto para validar primero
+  // Agregamos ASYNC acá para poder usar AWAIT adentro
+  formulario.addEventListener('submit', async function(event) {
     event.preventDefault();
-
-    // Limpieza de errores viejos antes de volver a validar
     limpiarErrores();
 
-    // Captura de los valores de los inputs
     const nombre = document.getElementById('nombre').value.trim();
     const email = document.getElementById('email').value.trim();
     const whatsapp = document.getElementById('whatsapp').value.trim();
 
     let tieneErrores = false;
 
-    // 3. Validamos el campo Nombre
     if (nombre === '') {
       mostrarError('nombre', 'Por favor, ingresá tu nombre completo.');
       tieneErrores = true;
     }
-
-    // 4. Validamos el campo Email 
     if (email === '' || !email.includes('@')) {
       mostrarError('email', 'Ingresá un correo electrónico válido.');
       tieneErrores = true;
     }
-
-    // 5. Validamos el campo WhatsApp
+    
+    // WhatsApp obligatorio ya que para esta campaña lo definimos así en el Front
     if (whatsapp === '') {
       mostrarError('whatsapp', 'El número de WhatsApp es obligatorio.');
       tieneErrores = true;
     }
 
-    // Si todo está perfecto, acá procesaremos el envío mañana
-    if (!tieneErrores) {
-      alert('¡Validación exitosa! Mañana nos conectamos al CRM.'); 
-      // Nota: Este alert es solo para que pruebes hoy en tu máquina, mañana lo borramos.
+    if (tieneErrores) return;
+
+    // --- INICIO DEL MOTOR ASÍNCRONO DEL CRM ---
+    
+    // 1. Estado de carga en el botón
+    const btnSubmit = formulario.querySelector('.btn-submit') || formulario.querySelector('button[type="submit"]');
+    const textoOriginalBoton = btnSubmit.innerText;
+    btnSubmit.innerText = 'Reservando promo... ⏳';
+    btnSubmit.disabled = true;
+
+    // 2. Armamos el contrato exacto (Mapeamos whatsapp -> phone)
+    const payload = {
+      name: nombre,
+      email: email,
+      phone: whatsapp,
+      message: "Lead registrado desde Landing Mundial 2026 - Línea Económica Pro"
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/landings/${LANDING_ID}/leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        // ÉXITO COMPLETO: Mensaje profesional para el usuario final
+        mostrarFeedbackUsuario(
+          'success', 
+          '¡Golazo! Tu registro fue exitoso. Un asesor de SueñoSimple se contactará con vos por WhatsApp para activar tus descuentos mundialistas.'
+        );
+        formulario.reset();
+      } else {
+        throw new Error('Error en el servidor CRM');
+      }
+
+    } catch (error) {
+      console.error('Error de integración:', error);
+      // ERROR DE CONEXIÓN
+      mostrarFeedbackUsuario(
+        'error', 
+        '¡Ups! Tuvimos un inconveniente temporal para procesar tu solicitud. Por favor, intentá nuevamente en unos minutos.'
+      );
+    } finally {
+      // Devolvemos el control al botón pase lo que pase
+      btnSubmit.innerText = textoOriginalBoton;
+      btnSubmit.disabled = false;
     }
+    // --- FIN DEL MOTOR ASÍNCRONO ---
   });
 
-  // Inyecta el error dinámicamente en el HTML
+  // Funciones de ayuda visual
   function mostrarError(idInput, mensaje) {
     const input = document.getElementById(idInput);
-    input.classList.add('input-error'); // Le pone el borde rojo de CSS
-
-    // Creamos el parrafo rojo sobre la marcha
+    if (!input) return;
+    input.classList.add('input-error');
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.innerText = mensaje;
-
-    // Lo metemos justo abajo del input correspondiente
     input.parentElement.appendChild(errorDiv);
   }
 
-  // FUNCIÓN DOCENTE: Limpia el rastro del intento anterior
   function limpiarErrores() {
-    // Sacamos los bordes rojos
     const inputsConError = document.querySelectorAll('.input-error');
     inputsConError.forEach(input => input.classList.remove('input-error'));
-
-    // Borramos los textos rojos del HTML
-    const mensajes = document.querySelectorAll('.error-message');
+    const mensajes = document.querySelectorAll('.error-message, .feedback-global');
     mensajes.forEach(msg => msg.remove());
+  }
+
+  // FUNCIÓN DOCENTE: Inyecta un bloque de feedback UX arriba o abajo del form
+  function mostrarFeedbackUsuario(tipo, mensaje) {
+    const feedbackDiv = document.createElement('div');
+    // Le ponemos una clase global y una específica según el estado (estilás con CSS)
+    feedbackDiv.className = `feedback-global feedback-${tipo}`; 
+    feedbackDiv.style.padding = '16px';
+    feedbackDiv.style.marginTop = '15px';
+    feedbackDiv.style.borderRadius = '4px';
+    feedbackDiv.style.fontWeight = 'bold';
+    feedbackDiv.style.textAlign = 'center';
+    
+    if (tipo === 'success') {
+      feedbackDiv.style.background = '#dcfce7'; // Verde clarito
+      feedbackDiv.style.color = '#15803d';
+    } else {
+      feedbackDiv.style.background = '#fef2f2'; // Rojo clarito
+      feedbackDiv.style.color = '#b91c1c';
+    }
+    
+    feedbackDiv.innerText = mensaje;
+    formulario.appendChild(feedbackDiv);
   }
 </script>
 
