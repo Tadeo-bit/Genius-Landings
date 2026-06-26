@@ -1,30 +1,18 @@
 <?php
 /**
  * GL-F07 — Gestión de clientes (alta, edición, baja)
- * TODO: Implementar persistencia real (archivo JSON o base de datos).
- * Por ahora el array está hardcodeado como punto de partida.
+ * Fuente de verdad: APIs de Budget Manager y Landing CRM.
  */
 require_once 'api.php';
 
-$clientes = [
-    ['id' => 1, 'nombre' => 'SueñoSimple', 'carpeta' => 'suenosimple'],
-    ['id' => 2, 'nombre' => 'TechStore',   'carpeta' => 'techstore'],
-    ['id' => 3, 'nombre' => 'ModalAtam',   'carpeta' => 'modalatam'],
-];
+$campaigns = get_campaigns();
+$landings = get_landings();
+$clientes = build_clients_catalog($campaigns, $landings);
 
 $mensaje = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nombre  = trim($_POST['nombre'] ?? '');
-    $carpeta = trim($_POST['carpeta'] ?? '');
-
-    // TODO GL-B03: validar que $carpeta no contenga espacios ni caracteres especiales
-    if ($nombre && $carpeta) {
-        // TODO: persistir el nuevo cliente
-        $mensaje = "Cliente '$nombre' registrado (pendiente persistencia).";
-    } else {
-        $mensaje = 'Error: nombre y carpeta son obligatorios.';
-    }
+  $mensaje = 'La gestión manual de clientes está deshabilitada: los datos se sincronizan desde Budget Manager y Landing CRM.';
 }
 ?>
 <!DOCTYPE html>
@@ -54,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <div class="admin-header">
     <strong>Genius Admin</strong>
-    <a href="index.php">← Volver</a>
+    <a href="index.php">← Inicio</a>
   </div>
 
   <div class="admin-main">
@@ -64,20 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="msg"><?= htmlspecialchars($mensaje) ?></div>
     <?php endif; ?>
 
-    <!-- Formulario de nuevo cliente -->
+    <!-- Formulario informativo (sin persistencia local) -->
     <div class="form-card">
-      <h2>Agregar cliente</h2>
+      <h2>Sincronización de clientes</h2>
       <form method="POST">
         <div class="field">
-          <label>Nombre del cliente</label>
-          <input type="text" name="nombre" placeholder="Ej: SueñoSimple" required>
+          <label>Origen de datos</label>
+          <input type="text" value="Budget Manager + Landing CRM" readonly>
         </div>
         <div class="field">
-          <label>Carpeta (sin espacios)</label>
-          <input type="text" name="carpeta" placeholder="Ej: suenosimple" required>
-          <!-- TODO GL-B03: validar que la carpeta no tenga espacios antes de guardar -->
+          <label>Estado</label>
+          <input type="text" value="Clientes derivados automáticamente desde APIs" readonly>
         </div>
-        <button type="submit" class="btn btn-primary">Agregar cliente</button>
+        <button type="submit" class="btn btn-primary">Actualizar aviso</button>
       </form>
     </div>
 
@@ -86,6 +73,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <table>
       <thead><tr><th>ID</th><th>Nombre</th><th>Carpeta</th><th>Acciones</th></tr></thead>
       <tbody>
+        <?php if (empty($clientes)): ?>
+          <tr>
+            <td colspan="4" style="color:#64748b;text-align:center;">No hay clientes disponibles desde las APIs.</td>
+          </tr>
+        <?php endif; ?>
         <?php foreach ($clientes as $c): ?>
           <tr>
             <td><?= $c['id'] ?></td>

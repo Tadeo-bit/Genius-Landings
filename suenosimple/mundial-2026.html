@@ -160,6 +160,23 @@
     border-color: #dc2626 !important;
   }
 
+  /* FEEDBACK DEL FORMULARIO */
+  #form-feedback {
+    max-width: 450px;
+    margin: 16px auto 0 auto;
+    padding: 14px 18px;
+    border-radius: 6px;
+    font-size: .93rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  #form-feedback.hidden { display: none; }
+  #form-feedback.exito  { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+  #form-feedback.error  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+  /* Estado del botón mientras envía */
+  .btn-submit:disabled { background-color: #93c5fd; cursor: not-allowed; }
+
   .footer {
   background: #0f172a;
   color: #64748b;
@@ -230,19 +247,18 @@
     <button type="submit" class="btn-submit">Registrarme ya</button>
   </form>
   
-  <!-- Contenedor invisible para el feedback visual que trabajaré mañana -->
-  <div id="form-feedback" class="hidden"></div>
+  <!-- Feedback visual tras el envío -->
+  <div id="form-feedback" class="hidden" role="alert" aria-live="polite"></div>
 </section>
 
 <footer class="footer">
   &copy; 2026 SueñoSimple. Todos los derechos reservados. &mdash;
   <a href="#">Política de privacidad</a>
 </footer>
-
 <script>
-  // 1. Captura del formulario y feedback 
+// 1. Captura del formulario y feedback 
   const formulario = document.getElementById('form-mundial');
-  // Simulamos el ID de la campaña del Mundial (ej: ID 7)
+  // Simulamos el ID de la campaña del Mundial (ej: ID 6)
   const LANDING_ID = 6; 
   const API_BASE_URL = 'http://localhost:3000';
 
@@ -343,10 +359,9 @@
     mensajes.forEach(msg => msg.remove());
   }
 
-  // FUNCIÓN DOCENTE: Inyecta un bloque de feedback UX arriba o abajo del form
+  // Inyecta un bloque de feedback UX arriba o abajo del form
   function mostrarFeedbackUsuario(tipo, mensaje) {
     const feedbackDiv = document.createElement('div');
-    // Le ponemos una clase global y una específica según el estado (estilás con CSS)
     feedbackDiv.className = `feedback-global feedback-${tipo}`; 
     feedbackDiv.style.padding = '16px';
     feedbackDiv.style.marginTop = '15px';

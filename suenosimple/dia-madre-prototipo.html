@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototipo - Landing Día de la Madre (SueñoSimple)</title>
+  <style>
+    /* Estilos estructurales básicos e invisibles para la performance */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: sans-serif; color: #0f172a; background: #ffffff; line-height: 1.5; }
+    
+    /* BARRA DE NAVEGACIÓN Y RETORNO OBLIGATORIA */
+    .nav-back-bar {
+      background: #f1f5f9;
+      padding: 12px 24px;
+      border-bottom: 2px solid #cbd5e1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-back {
+      display: inline-block;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn-back:hover { text-decoration: underline; }
+
+    /* SECCIONES DEL PROTOTIPO */
+    .container { max-width: 800px; margin: 0 auto; padding: 24px; }
+    header, section, footer { margin-bottom: 40px; padding: 20px; border: 1px dashed #94a3b8; }
+    
+    /* FORMULARIO DE CAPTACIÓN */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 4px; font-weight: 600; }
+    .form-group input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
+    .btn-submit, .btn-buy { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .btn-buy { background: #16a34a; text-decoration: none; display: inline-block; }
+    
+    /* FEEDBACK VISUAL INSTANTÁNEO */
+    .hidden { display: none; }
+    .feedback-success { background: #dcfce7; color: #15803d; padding: 16px; margin-top: 16px; border-radius: 4px; border: 1px solid #bbf7d0; }
+    .error-msg { color: #dc2626; font-size: 0.85rem; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-back-bar">
+    <span class="logo-placeholder">[Logo Provisorio SueñoSimple]</span>
+    <a href="index.html" class="btn-back" id="btn-retorno">← Volver al sitio oficial de SueñoSimple</a>
+  </nav>
+
+  <div class="container">
+
+    <header>
+      <h1>Lorem Ipsum Día de la Madre</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      <img src="https://via.placeholder.com/600x200" alt="Foto genérica hero" style="width:100%; max-width:100%; height:auto; margin-top:15px;">
+    </header>
+
+    <section id="seccion-formulario">
+      <h2>Registro Acceso Anticipado</h2>
+      <p style="margin-bottom: 15px;">Lorem ipsum dolor sit amet tempor vinculum.</p>
+      
+      <form id="form-madre" novalidate>
+        <div class="form-group">
+          <label for="nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre completo">
+          <div id="error-nombre" class="error-msg hidden">El nombre es obligatorio.</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="mail">Mail:</label>
+          <input type="email" id="mail" name="mail" placeholder="ejemplo@correo.com">
+          <div id="error-mail" class="error-msg hidden">Ingrese un correo válido con formato @.</div>
+        </div>
+        
+        <div class="form-group">
+          <label for="celular">Celular:</label>
+          <input type="tel" id="celular" name="celular" placeholder="Ej: 1123456789">
+          <div id="error-celular" class="error-msg hidden">El celular es obligatorio.</div>
+        </div>
+        
+        <button type="submit" class="btn-submit">Enviar Datos</button>
+      </form>
+
+      <div id="feedback-visual" class="feedback-success hidden">
+        <strong>¡Datos recibidos correctamente!</strong> Tu registro para el Día de la Madre ha sido procesado.
+      </div>
+    </section>
+
+    <section>
+      <h2>Línea Económica Pro</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Espacio reservado para las especificaciones del colchón.</p>
+      <div style="margin: 15px 0; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0;">
+        <h3>Precio Especial: $XX.XXX</h3>
+        <p>¡Hasta 12 cuotas sin interés!</p>
+      </div>
+      <a href="https://example.com/test-tracking-compra" target="_blank" class="btn-buy" id="btn-compra-trackeable">Comprar Producto</a>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 SueñoSimple. Prototipo de Validación Técnica.</p>
+    </footer>
+
+  </div>
+
+  <script>
+  const formulario = document.getElementById('form-madre');
+  const feedback = document.getElementById('feedback-visual');
+
+  // Hardcodea temporalmente el ID de la landing como sugiere la documentación para desarrollo local
+  const LANDING_ID = 6; 
+  const API_BASE_URL = 'http://localhost:3000';
+
+  formulario.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // 1. Resetear estados de error y feedback
+    document.querySelectorAll('.error-msg').forEach(el => el.classList.add('hidden'));
+    feedback.classList.add('hidden');
+
+    // 2. Capturar valores del formulario
+    const nombre = document.getElementById('nombre').value.trim();
+    const mail = document.getElementById('mail').value.trim();
+    const celular = document.getElementById('celular').value.trim();
+
+    let tieneErrores = false;
+
+    // 3. Validaciones de Frontend obligatorias
+    if (nombre === '') {
+      document.getElementById('error-nombre').classList.remove('hidden');
+      tieneErrores = true;
+    }
+    if (mail === '' || !mail.includes('@')) {
+      document.getElementById('error-mail').classList.remove('hidden');
+      tieneErrores = true;
+    }
+    if (celular === '') {
+      document.getElementById('error-celular').classList.remove('hidden');
+      tieneErrores = true;
+    }
+
+    // 4. Si hay errores, frenamos la ejecución
+    if (tieneErrores) return;
+
+    // 5. Cambiar el botón a estado "Enviando..." (Requerimiento de feedback)
+    const btnSubmit = formulario.querySelector('.btn-submit');
+    const textoOriginalBoton = btnSubmit.innerText;
+    btnSubmit.innerText = 'Enviando...';
+    btnSubmit.disabled = true;
+
+    // 6. Construir el Contrato de Datos (Payload) exacto que espera la API
+    const payload = {
+      name: nombre,
+      email: mail,
+      phone: celular || null,
+      message: "Lead registrado desde Prototipo Día de la Madre" // Campo opcional requerido por el contrato
+    };
+
+    // 7. Envío de datos mediante fetch asíncrono
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/landings/${LANDING_ID}/leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        // ÉXITO: Mostramos feedback verde y limpiamos formulario
+        feedback.className = 'feedback-success';
+        feedback.innerHTML = '<strong>¡Gracias por contactarte!</strong> Sus datos se recibieron correctamente de forma asíncrona.';
+        feedback.classList.remove('hidden');
+        formulario.reset();
+      } else {
+        // ERROR DE SERVIDOR (Ej: 500 o 404)
+        throw new Error('Error en la respuesta del servidor');
+      }
+
+    } catch (error) {
+      // ERROR DE CONEXIÓN (Ej: Servidor apagado)
+      feedback.className = 'error-msg';
+      feedback.style.padding = '16px';
+      feedback.style.background = '#fef2f2';
+      feedback.style.border = '1px solid #fca5a5';
+      feedback.style.borderRadius = '4px';
+      feedback.innerHTML = '<strong>Error:</strong> No fue posible enviar la solicitud al CRM (¿Está el servidor encendido?).';
+      feedback.classList.remove('hidden');
+      console.error('Hubo un problema con la petición fetch:', error);
+    } finally {
+      // Restauramos el botón pase lo que pase
+      btnSubmit.innerText = textoOriginalBoton;
+      btnSubmit.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
