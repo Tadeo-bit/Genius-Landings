@@ -17,11 +17,11 @@ Repositorio que centraliza las landing pages estáticas (HTML/CSS) de cada clien
 
 | Campo | Valor |
 |---|---|
-| Rama actual | `main` |
+| Rama actual | `dev` |
 | Rama por defecto | `main` |
 | Cambios sin commitear | Ninguno (working tree limpio) |
-| Sincronización | Al día con `origin/main` |
-| Último commit | `3628344 — Add files via upload` |
+| Sincronización | Al día con `origin/dev` |
+| Último commit | `8eb1ffa — Merge pull request #4 from Tadeo-bit/feature/landing-mundial` |
 
 ## Estado funcional
 
@@ -110,3 +110,35 @@ php -S localhost:8000 -t admin
 - Validacion HTTP en admin:
   - `landings.php?cliente=SueñoSimple` muestra solo landings de SueñoSimple.
   - `panel.php?carpeta=suenosimple` responde 200 y carga el panel correcto.
+
+---
+
+### 2026-06-25 — Correcciones finales del admin PHP (commit `bfe4fc9`)
+
+**Cambios realizados**
+
+- `admin/landings.php`: botón Preview corregido a `/api/landings/{id}/preview`; navegación de retorno cambiada a `← Inicio → index.php`.
+- `admin/clientes.php`: navegación de retorno cambiada a `← Inicio → index.php`.
+- `admin/panel.php`: reescritura completa. Acepta `?carpeta=` y `?file=`. Reescribe rutas de CSS vía `assets.php`. Inyecta `MutationObserver` para parchear links `.html` generados asincrónamente.
+- `admin/assets.php`: nuevo archivo. Sirve archivos estáticos fuera del docroot (`css/styles.css`) con validación de path traversal.
+
+**Verificaciones**
+
+- `php -l` sobre todos los archivos PHP: sin errores.
+- Preview de landing abre URL correcta en el CRM.
+- Panel de cliente carga con CSS correcto y links de landing funcionales.
+
+---
+
+### 2026-06-25/26 — `suenosimple/mundial-2026.html` — Integración CRM + WhatsApp (PR #4)
+
+**Cambios mergeados desde `feature/landing-mundial` (commit `22f515d`, PR #4)**
+
+- Integración asíncrona con la API del CRM para registro de leads.
+- Mapeo de campos del formulario al endpoint `POST /api/landings/{id}/leads`.
+- Lógica de redirección a WhatsApp tras registro exitoso.
+- 110 inserciones / 65 eliminaciones en `suenosimple/mundial-2026.html`.
+
+**Estado Git**
+
+- Rama `dev` local sincronizada con `origin/dev` (fast-forward a commit `8eb1ffa`).
