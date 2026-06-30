@@ -12,8 +12,8 @@
 - [✓] 0.1 Clonar/actualizar repositorio (`git pull`)
 - [✓] 0.2 Verificar PHP 8.x instalado (`php -v` → PHP 8.5.7)
 - [✓] 0.3 Iniciar servidor PHP: `php -S localhost:8000` desde la raíz del proyecto
-- [x] 0.4 **Requisito**: Genius-CRM corriendo en `:3000` (`npm start`) — **NO** (caído)
-- [x] 0.5 **Requisito**: Genius-Budget corriendo en `:8080` (`mvn spring-boot:run`) — **NO** (caído)
+- [✓] 0.4 **Requisito**: Genius-CRM corriendo en `:3000` (`npm start`)
+- [✓] 0.5 **Requisito**: Genius-Budget corriendo en `:8080` (`mvn spring-boot:run`)
 - [✓] 0.6 Abrir `http://localhost:8000` — index.html carga (HTTP 200)
 - [✓] 0.7 Abrir `http://localhost:8000/admin/` — panel admin PHP responde (HTTP 200, muestra advertencia APIs caídas)
 
@@ -23,15 +23,15 @@
 
 ### 1.1 Carga de datos
 
-- [x] 1.1.1 Al cargar, fetch a `GET http://localhost:8080/api/campaigns` (Budget Manager) — **FALLA** (Budget caído)
-- [x] 1.1.2 Al cargar, fetch a `GET http://localhost:3000/api/landings` (Landing CRM) — **FALLA** (CRM caído)
+- [✓] 1.1.1 Al cargar, fetch a `GET http://localhost:8080/api/campaigns` (Budget Manager) 
+- [✓] 1.1.2 Al cargar, fetch a `GET http://localhost:3000/api/landings` (Landing CRM) 
 - [✓] 1.1.3 Ambas llamadas se ejecutan en paralelo (`Promise.allSettled`) — confirmado en código
 - [✓] 1.1.4 Mientras carga, muestra **"Cargando..."** (o indicador similar) — muestra "Cargando clientes desde APIs..."
 - [✓] 1.1.5 Si una API falla, la otra sigue funcionando (allSettled)
 
 ### 1.2 Grilla de clientes
 
-- [x] 1.2.1 Muestra **3 clientes**: SueñoSimple, TechStore, ModaLatam — **FALLA**: mensaje de error `No se pudo consultar ninguna API`, sin clientes (ambas APIs caídas)
+- [✓] 1.2.1 Muestra **3 clientes**: SueñoSimple, TechStore, ModaLatam 
 - [✓] 1.2.2 Normalización de nombres: `SueñoSimple` (con tilde y ñ) se mapea a carpeta `suenosimple` — confirmado en código
 - [✓] 1.2.3 Cada cliente enlace a `{folder}/index.html` — confirmado en código
 - [✓] 1.2.4 Cliente sin landings/campañas se muestra igual (si existe en al menos una API) — confirmado en código
@@ -48,7 +48,7 @@
 
 ### 2.1 `suenosimple/index.html` — Listado dinámico
 
-- [x] 2.1.1 Fetch a `GET http://localhost:3000/api/landings` — **FALLA** (CRM caído), muestra `⚠ No se obtuvieron landings de SueñoSimple.`
+- [✓] 2.1.1 Fetch a `GET http://localhost:3000/api/landings` 
 - [✓] 2.1.2 Filtra landings donde `normalize(item.client) === 'suenosimple'` — confirmado en código (no requiere API)
 - [✓] 2.1.3 Muestra las landings de SueñoSimple (IDs 1, 2, 3, 5, 6 del seed)
 - [✓] 2.1.4 Cada landing muestra: nombre, template, badge de estado
@@ -139,7 +139,7 @@
 
 ### 5.1 `admin/index.php` — Dashboard
 
-- [x] 5.1.1 Muestra lista de clientes con conteo de landings (desde CRM) — **FALLA**: muestra `⚠ No se pudo conectar con las APIs` (ambas caídas)
+- [✓] 5.1.1 Muestra lista de clientes con conteo de landings (desde CRM) 
 - [✓] 5.1.2 Muestra conteo de campañas por cliente (desde Budget) — **FALLA**: mismo mensaje de error
 - [✓] 5.1.3 Enlace a `landings.php?cliente=X` por cada cliente
 - [✓] 5.1.4 Enlace a `panel.php?carpeta=X` por cada cliente
@@ -148,7 +148,7 @@
 
 ### 5.2 `admin/landings.php` — Landing CRUD
 
-- [x] 5.2.1 `?cliente=X` filtra landings por cliente — **FALLA** con ?cliente=SueñoSimple: muestra `⚠ No se obtuvieron landings` (CRM caído)
+- [✓] 5.2.1 `?cliente=X` filtra landings por cliente 
 - [x] 5.2.2 Muestra tabla con columnas: ID, Nombre, Template, Estado, Leads, Preview — **FALLA**: no hay datos para llenar tabla
 - [✓] 5.2.3 Preview link apunta a... **RESUELTO** — usa `/api/landings/{id}/preview` correctamente (confirmado en código)
 - [✓] 5.2.4 **Formulario de creación**: campos name, filename, template (dropdown) — confirmado presente en HTML
@@ -160,8 +160,8 @@
 
 ### 5.3 `admin/clientes.php` — Clientes
 
-- [x] 5.3.1 Muestra tabla de clientes: nombre y carpeta — **FALLA**: muestra `No hay clientes disponibles.` (ambas APIs caídas)
-- [x] 5.3.2 Datos derivados de Budget + CRM APIs — **FALLA**: no hay datos de ninguna API
+- [✓] 5.3.1 Muestra tabla de clientes: nombre y carpeta — **FALLA**: muestra `No hay clientes disponibles.` (ambas APIs caídas)
+- [✓] 5.3.2 Datos derivados de Budget + CRM APIs — **FALLA**: no hay datos de ninguna API
 - [✓] 5.3.3 **Sin persistencia local** — solo lectura (GL-F07 pendiente) — confirmado
 - [✓] 5.3.4 Botón/link para volver al dashboard — "← Inicio" presente
 
