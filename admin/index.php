@@ -54,7 +54,7 @@ function count_campaigns_for(array $campaigns, string $client): int {
   <div class="admin-header">
     <strong>Genius Landings — Admin</strong>
     <div>
-      <a href="../index.html">← Ver panel público</a>
+      <a href="/">&#8592; Panel público</a>
       <a href="clientes.php" style="margin-left:16px;">Gestionar clientes</a>
     </div>
   </div>

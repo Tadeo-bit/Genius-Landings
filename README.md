@@ -67,7 +67,9 @@ Si alguna de las dos APIs no está corriendo, el panel mostrará una advertencia
    ```bash
    php -S localhost:8000
    ```
-3. Abrí `http://localhost:8000/admin/` en el navegador.
+3. Dos puntos de acceso:
+   - **Página pública** (vista de cliente): `http://localhost:8000/`
+   - **Panel admin**: `http://localhost:8000/admin/`
 
 El panel estático (`index.html`) sigue funcionando sin servidor — no se ve afectado.
 
