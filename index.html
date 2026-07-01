@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Genius Agency — Landings</title>
+  <title>Genius Landings</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
   <header class="site-header">
-    <a href="index.html" class="brand">Genius<span>.</span></a>
-    <span class="header-meta">Panel interno — Landings por cliente</span>
-    <a href="/admin/" style="margin-left:auto;font-size:.82rem;color:#64748b;text-decoration:none;padding:6px 14px;border:1px solid #e2e8f0;border-radius:6px;">Panel Admin &#8594;</a>
+    <a href="/" class="brand">Genius<span>.</span> Landings</a>
   </header>
 
   <main>
     <div class="page-header">
       <h1>Clientes</h1>
-      <p>Seleccioná un cliente para ver y gestionar sus landing pages.</p>
+      <p>Seleccioná un cliente para acceder a sus landing pages.</p>
     </div>
 
     <div id="status-msg" style="color:#64748b;font-size:.9rem;">Cargando clientes desde APIs...</div>
@@ -87,7 +85,7 @@
             <p>Datos sincronizados desde Budget Manager y Landing CRM.</p>
             <span class="client-stat">${landingText} · ${campaignText}</span>
             <br>
-            <a href="${folder}/index.html" class="btn btn-primary">Ver landings</a>
+            <a href="/${folder}/" class="btn btn-primary">Ver panel</a>
           </div>
         `;
       }).join('');

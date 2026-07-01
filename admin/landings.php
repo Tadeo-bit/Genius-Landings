@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Landings — <?= htmlspecialchars($cliente) ?> — Genius Admin</title>
+  <title>Landings — <?= htmlspecialchars($cliente) ?> — Genius Landings Admin</title>
   <link rel="stylesheet" href="../css/styles.css">
   <style>
     .admin-header { background:#0f172a; color:#fff; padding:0 32px; height:56px; display:flex; align-items:center; gap:16px; }
@@ -107,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
   <div class="admin-header">
-    <strong>Genius Admin</strong>
-    <a href="index.php">← Inicio</a>
+    <strong>Genius Landings - Admin</strong>
+    <a href="index.php"> Inicio</a>
   </div>
 
   <div class="admin-main">

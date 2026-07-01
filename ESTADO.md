@@ -142,3 +142,24 @@ php -S localhost:8000 -t admin
 **Estado Git**
 
 - Rama `dev` local sincronizada con `origin/dev` (fast-forward a commit `8eb1ffa`).
+
+---
+
+### 2026-07-01 — Separación público/admin + rediseño `mundial-2026.html`
+
+**Diferenciación página pública vs panel admin**
+
+- `index.html`: eliminado el link "Panel Admin →" del header para que los clientes no accedan directamente al admin. Botón "Ver panel" actualizado a `/${folder}/`. Título cambiado a "Genius Landings".
+- `admin/auth.php`: nuevo archivo. Guard de acceso basado en `DOCUMENT_ROOT`: solo permite cargar el admin si el servidor fue iniciado con `-t admin` (el docroot termina en `/admin`). De lo contrario, responde 403 y redirige a `http://localhost:8000/`.
+- `admin/login.php` y `admin/logout.php`: archivos creados (sin uso activo aún).
+- `admin/index.php`, `admin/landings.php`, `admin/panel.php`, `admin/clientes.php`, `admin/assets.php`: agregado `require_once 'auth.php'` al inicio de cada archivo.
+
+**Rediseño completo de `suenosimple/mundial-2026.html`**
+
+- Diseño blanco/azul (`#2563eb`) consistente con `economica-pro.html`. Se eliminaron los estilos mundialistas anteriores (navy/celeste/dorado).
+- Secciones implementadas: back bar, countdown strip (sticky, timer JS), nav, hero (grid 2 columnas + cards animadas), features strip, match sale section, products (3 cards con precio tachado y cuotas), testimonials, trust strip, logistics, form CRM (`LANDING_ID=6`), footer, floating WhatsApp.
+- Corregida la ruta del logo: `assets/ss_logo.jpeg` → `../assets/ss_logo.jpeg` (el archivo existe en `Genius-Landings/assets/`, no en `suenosimple/assets/`). Aplicado en nav y footer.
+
+**Estado Git**
+
+- Cambios en `dev`, pendientes de commit.
