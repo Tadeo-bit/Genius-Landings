@@ -498,7 +498,27 @@
   updateTimers(); setInterval(updateTimers, 1000);
 
   const waBtn = document.getElementById('wa-float');
-  window.addEventListener('scroll', () => { waBtn.classList.toggle('visible', window.scrollY > 450); });
+  // IntersectionObserver: muestra el botón flotante cuando el hero sale del viewport.
+  // Evita disparar lógica en cada evento scroll.
+  const heroSentinel = document.querySelector('.hero');
+  if (heroSentinel && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => waBtn.classList.toggle('visible', !entry.isIntersecting),
+      { threshold: 0 }
+    ).observe(heroSentinel);
+  } else {
+    // Fallback con throttle para browsers sin IntersectionObserver
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          waBtn.classList.toggle('visible', window.scrollY > 450);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
 
   function showToast(msg) {
     const t = document.getElementById('toast');
@@ -506,7 +526,7 @@
     t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
   }
 
-  const LANDING_ID = 6, API_BASE = 'http://localhost:3000'\;
+  const LANDING_ID = 6, API_BASE = 'http://localhost:3000';
   const form = document.getElementById('form-mundial'), feedback = document.getElementById('form-feedback');
 
   form.addEventListener('submit', async function(e) {
