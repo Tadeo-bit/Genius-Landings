@@ -75,6 +75,51 @@ function canonical_client_name(string $client_name): string {
     return trim($client_name);
 }
 
+function get_landing_statuses(): array {
+    return [
+        ['value' => 'active',   'label' => 'Activa',   'class' => 'badge-active'],
+        ['value' => 'draft',    'label' => 'Borrador', 'class' => 'badge-draft'],
+        ['value' => 'inactive', 'label' => 'Inactiva', 'class' => 'badge-inactive'],
+    ];
+}
+
+function update_landing_status(int $id, string $new_status): array {
+    $payload = json_encode(['status' => $new_status]);
+    $url = LANDING_CRM_URL . '/api/landings/' . $id;
+
+    $context = stream_context_create([
+        'http' => [
+            'method'  => 'PUT',
+            'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($payload),
+            'content' => $payload,
+            'timeout' => 4,
+            'ignore_errors' => true,
+        ]
+    ]);
+
+    $response = @file_get_contents($url, false, $context);
+    $http_code = 0;
+    foreach ($http_response_header ?? [] as $h) {
+        if (preg_match('#HTTP/\S+\s+(\d+)#', $h, $m)) {
+            $http_code = (int)$m[1];
+        }
+    }
+
+    if ($response !== false && $http_code === 200) {
+        return ['success' => true, 'message' => 'Estado actualizado correctamente.'];
+    }
+
+    $error_msg = 'Error al actualizar el estado';
+    if ($response !== false) {
+        $decoded = json_decode($response, true);
+        $error_msg .= ': ' . ($decoded['error'] ?? "HTTP $http_code");
+    } else {
+        $error_msg .= ': no se pudo conectar con el CRM (HTTP ' . $http_code . ')';
+    }
+
+    return ['success' => false, 'message' => $error_msg];
+}
+
 function build_clients_catalog(array $campaigns, array $landings): array {
     $catalog = [];
 

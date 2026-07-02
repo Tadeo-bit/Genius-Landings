@@ -5,6 +5,36 @@
  */
 require_once 'api.php';
 
+// Mapa de estados para usar en la tabla
+$status_list = get_landing_statuses();
+$status_map  = array_column($status_list, 'label', 'value');
+$status_class_map = array_column($status_list, 'class', 'value');
+
+// ─── AJAX handlers ───────────────────────────────────────
+$action = $_GET['action'] ?? '';
+
+if ($action === 'get_statuses') {
+    header('Content-Type: application/json');
+    echo json_encode($status_list);
+    exit;
+}
+
+if ($action === 'update_status') {
+    header('Content-Type: application/json');
+    $input = json_decode(file_get_contents('php://input'), true);
+    $id     = (int)($input['id'] ?? 0);
+    $status = $input['status'] ?? '';
+
+    if ($id && $status && isset($status_map[$status])) {
+        $result = update_landing_status($id, $status);
+    } else {
+        $result = ['success' => false, 'message' => 'Faltan id o status, o el status no es válido.'];
+    }
+
+    echo json_encode($result);
+    exit;
+}
+
 $cliente  = $_GET['cliente'] ?? '';
 $landings = $cliente ? get_landings($cliente) : [];
 
@@ -99,9 +129,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     thead th { padding:10px 14px; text-align:left; font-size:.8rem; }
     tbody td { padding:10px 14px; border-bottom:1px solid #e9ecef; font-size:.88rem; }
     .badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:.72rem; font-weight:700; }
-    .badge-activa   { background:#d1e7dd; color:#0a3622; }
-    .badge-borrador { background:#e9ecef; color:#495057; }
-    .badge-inactiva { background:#f8d7da; color:#842029; }
+    .badge-wrap { display:inline-flex; align-items:center; gap:2px; cursor:pointer; }
+    .badge-wrap:hover .badge-edit-icon { visibility:visible; }
+    .badge-edit-icon { visibility:hidden; display:inline-block; width:14px; text-align:center; font-size:.62rem; opacity:.5; }
+    .badge-select { padding:2px 8px; border-radius:12px; font-size:.72rem; font-weight:700; border:1px solid #cbd5e1; background:#fff; cursor:pointer; outline:none; }
+    .badge-select:focus { border-color:#3b82f6; box-shadow:0 0 0 2px rgba(59,130,246,.2); }
+    .badge-updating { opacity:.6; pointer-events:none; }
+    .badge-spinner { display:inline-block; width:12px; height:12px; border:2px solid #e2e8f0; border-top-color:#3b82f6; border-radius:50%; animation:bspin .6s linear infinite; margin-left:6px; vertical-align:middle; }
+    @keyframes bspin { to { transform:rotate(360deg); } }
+    .toast-error { position:fixed; top:16px; right:16px; background:#dc2626; color:#fff; padding:10px 18px; border-radius:6px; font-size:.85rem; font-weight:600; box-shadow:0 4px 12px rgba(0,0,0,.15); z-index:9999; animation:toast-in .3s ease; }
+    @keyframes toast-in { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+    .confirm-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); display:flex; align-items:center; justify-content:center; z-index:9998; }
+    .confirm-modal { background:#fff; border-radius:10px; padding:28px; max-width:420px; width:90%; box-shadow:0 8px 30px rgba(0,0,0,.15); }
+    .confirm-modal h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .confirm-info { font-size:.85rem; color:#64748b; margin-bottom:16px; }
+    .confirm-message { width:100%; padding:10px 12px; border:1px solid #dee2e6; border-radius:6px; font-size:.85rem; resize:vertical; min-height:60px; margin-bottom:16px; box-sizing:border-box; font-family:inherit; }
+    .confirm-actions { display:flex; gap:10px; justify-content:flex-end; }
+    .btn-cancel { background:#f1f5f9; color:#475569; }
+    .btn-cancel:hover { background:#e2e8f0; }
+    .btn-confirm { background:#2563eb; color:#fff; }
+    .btn-confirm:hover { background:#1d4ed8; }
+    .btn-confirm:disabled { opacity:.4; cursor:not-allowed; }
     .no-api-warning { color:#dc3545; background:#f8d7da; padding:12px 16px; border-radius:4px; margin-bottom:20px; font-size:.88rem; }
   </style>
 </head>
@@ -141,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <td><?= $l['id'] ?></td>
               <td><?= htmlspecialchars($l['name'] ?? $l['title'] ?? '—') ?></td>
               <td><?= htmlspecialchars($l['template'] ?? '—') ?></td>
-              <td><span class="badge badge-<?= htmlspecialchars($l['status'] ?? 'borrador') ?>"><?= htmlspecialchars($l['status'] ?? 'borrador') ?></span></td>
+              <td><span class="badge-wrap" data-landing-id="<?= $l['id'] ?>" data-landing-name="<?= htmlspecialchars($l['name'] ?? $l['title'] ?? '—') ?>" data-status="<?= htmlspecialchars($l['status'] ?? 'draft') ?>"><span class="badge <?= htmlspecialchars($status_class_map[$l['status'] ?? 'draft'] ?? 'badge-draft') ?>"><?= htmlspecialchars($status_map[$l['status'] ?? 'draft'] ?? 'Borrador') ?></span><span class="badge-edit-icon">✏️</span></span></td>
               <td>
                 <?= $leads_by_landing[$l['id']] ?? '—' ?>
                 <!-- TODO GL-F09: mostrar conteo real -->
@@ -181,5 +229,152 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php endif; ?>
   </div>
+
+<script>
+(function() {
+  var STATUSES = [];
+
+  fetch('?action=get_statuses')
+    .then(function(r) { return r.json(); })
+    .then(function(data) { STATUSES = data; })
+    .catch(function() { console.warn('No se pudieron cargar los estados'); });
+
+  function getStatusLabel(val) {
+    var s = STATUSES.find(function(x) { return x.value === val; });
+    return s ? s.label : val;
+  }
+
+  document.addEventListener('click', function(e) {
+    var wrap = e.target.closest('.badge-wrap');
+    if (!wrap || wrap.querySelector('.badge-select')) return;
+
+    e.preventDefault();
+
+    var id = wrap.dataset.landingId;
+    var landingName = wrap.dataset.landingName;
+    var currentStatus = wrap.dataset.status;
+    var isUpdating = wrap.dataset.updating === 'true';
+
+    if (isUpdating || STATUSES.length === 0) return;
+
+    delete wrap.dataset.saving;
+    wrap.dataset.updating = 'true';
+
+    var select = document.createElement('select');
+    select.className = 'badge-select';
+
+    STATUSES.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s.value;
+      opt.textContent = s.label;
+      if (s.value === currentStatus) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    wrap.textContent = '';
+    wrap.appendChild(select);
+    select.focus();
+
+    var restoreBadge = function(statusValue) {
+      var s = STATUSES.find(function(x) { return x.value === statusValue; }) || STATUSES[0];
+      wrap.className = 'badge-wrap';
+      wrap.dataset.status = statusValue;
+      wrap.innerHTML = '<span class="badge ' + (s.class || 'badge-draft') + '">' + s.label + '</span><span class="badge-edit-icon">\u270F\uFE0F</span>';
+      wrap.dataset.updating = 'false';
+      delete wrap.dataset.saving;
+    };
+
+    var outClick = function(ev) {
+      if (!wrap.contains(ev.target) && wrap.dataset.saving !== 'true') {
+        restoreBadge(currentStatus);
+        document.removeEventListener('click', outClick);
+      }
+    };
+    setTimeout(function() { document.addEventListener('click', outClick); }, 0);
+
+    select.addEventListener('change', function() {
+      if (wrap.dataset.saving === 'true') return;
+      var newStatus = select.value;
+      if (newStatus === currentStatus) {
+        restoreBadge(currentStatus);
+        return;
+      }
+      showConfirm(wrap, id, landingName, currentStatus, newStatus, restoreBadge);
+    });
+  });
+
+  function showConfirm(wrap, id, landingName, currentStatus, newStatus, restoreBadge) {
+    var existing = document.querySelector('.confirm-overlay');
+    if (existing) existing.remove();
+
+    var overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    overlay.innerHTML =
+      '<div class="confirm-modal">' +
+        '<h3>\u00BFEst\u00E1 seguro que desea realizar cambios sobre <strong>' + escapeHtml(landingName) + '</strong>?</h3>' +
+        '<p class="confirm-info">Estado actual: <strong>' + getStatusLabel(currentStatus) + '</strong> \u2192 <strong>' + getStatusLabel(newStatus) + '</strong></p>' +
+        '<label style="display:block;font-size:.82rem;font-weight:600;margin-bottom:4px;color:#0f172a;">Escrib\u00ED el nombre de la landing para confirmar</label>' +
+        '<textarea class="confirm-message" placeholder="Copi\u00E1 y peg\u00E1 el nombre de la landing para confirmar"></textarea>' +
+        '<div class="confirm-actions">' +
+          '<button class="btn btn-cancel">Cancelar</button>' +
+          '<button class="btn btn-confirm" disabled>Confirmar</button>' +
+        '</div>' +
+      '</div>';
+
+    document.body.appendChild(overlay);
+
+    var textarea = overlay.querySelector('.confirm-message');
+    var confirmBtn = overlay.querySelector('.btn-confirm');
+
+    textarea.addEventListener('input', function() {
+      confirmBtn.disabled = textarea.value.trim() !== landingName;
+    });
+
+    overlay.querySelector('.btn-cancel').addEventListener('click', function() {
+      restoreBadge(currentStatus);
+      overlay.remove();
+    });
+
+    confirmBtn.addEventListener('click', function() {
+      if (textarea.value.trim() !== landingName) return;
+      overlay.remove();
+      wrap.dataset.saving = 'true';
+      wrap.innerHTML = '<span class="badge">' + getStatusLabel(newStatus) + '</span><span class="badge-spinner"></span>';
+
+      fetch('?action=update_status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: Number(id), status: newStatus })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.success) throw new Error(data.message || 'Error desconocido');
+        restoreBadge(newStatus);
+      })
+      .catch(function(err) {
+        restoreBadge(currentStatus);
+        var toast = document.createElement('div');
+        toast.className = 'toast-error';
+        toast.textContent = 'Error al actualizar estado: ' + err.message;
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.remove(); }, 4000);
+      });
+    });
+
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        restoreBadge(currentStatus);
+        overlay.remove();
+      }
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+})();
+</script>
 </body>
 </html>
