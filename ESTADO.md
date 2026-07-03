@@ -163,3 +163,21 @@ php -S localhost:8000 -t admin
 **Estado Git**
 
 - Cambios en `dev`, pendientes de commit.
+
+---
+
+### 2026-07-03 — Fix cambio de estado de landings en admin (rama `feat/modificarEstadosGestorLandings`)
+
+**Cambio realizado**
+
+- `admin/api.php`: función `update_landing_status` corregida.
+  - Método: `PUT` → `PATCH`.
+  - URL: `/api/landings/{id}` → `/api/landings/{id}/status`.
+
+**Motivo**
+
+El endpoint `PUT /api/landings/{id}` no existía en Genius-CRM-main. El admin llamaba a una ruta inexistente al intentar cambiar el estado de una landing, obteniendo siempre un error de conexión. El endpoint correcto `PATCH /api/landings/{id}/status` fue creado en paralelo en Genius-CRM-main.
+
+**Estado Git**
+
+- Cambios en rama `feat/modificarEstadosGestorLandings`, pendientes de commit y merge.
