@@ -256,85 +256,130 @@
   <a href="#">Política de privacidad</a>
 </footer>
 <script>
-  // ─── Integración con Landing CRM ────────────────────────────────────────
-  // Endpoint: POST /api/landings/:id/leads
-  // La landing "Captación leads - Newsletter SuenoSimple" tiene id 3 en el CRM.
-  const LANDING_CRM_URL = 'http://localhost:3000';
-  const LANDING_ID      = 3;
+// 1. Captura del formulario y feedback 
+  const formulario = document.getElementById('form-mundial');
+  // Simulamos el ID de la campaña del Mundial (ej: ID 6)
+  const LANDING_ID = 6; 
+  const API_BASE_URL = 'http://localhost:3000';
 
-  const form     = document.getElementById('form-mundial');
-  const feedback = document.getElementById('form-feedback');
-  const btnEnviar = form.querySelector('button[type="submit"]');
+  // Agregamos ASYNC acá para poder usar AWAIT adentro
+  formulario.addEventListener('submit', async function(event) {
+    event.preventDefault();
+    limpiarErrores();
 
-  function mostrarFeedback(tipo, mensaje) {
-    feedback.className = tipo;          // 'exito' | 'error'
-    feedback.textContent = mensaje;
-    feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
 
-  function validarFormulario(nombre, email, telefono) {
-    if (!nombre.trim())              return 'El nombre es obligatorio.';
-    if (!email.trim())               return 'El correo electrónico es obligatorio.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-                                     return 'El correo electrónico no es válido.';
-    if (!telefono.trim())            return 'El WhatsApp es obligatorio.';
-    if (!/^\d{6,15}$/.test(telefono.replace(/[\s\-+()]/g, '')))
-                                     return 'El número de WhatsApp no es válido (solo dígitos, 6-15 caracteres).';
-    return null;
-  }
+    let tieneErrores = false;
 
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const nombre   = document.getElementById('nombre').value;
-    const email    = document.getElementById('email').value;
-    const telefono = document.getElementById('whatsapp').value;
-
-    // Validación en cliente antes de llamar a la API
-    const errorValidacion = validarFormulario(nombre, email, telefono);
-    if (errorValidacion) {
-      mostrarFeedback('error', errorValidacion);
-      return;
+    if (nombre === '') {
+      mostrarError('nombre', 'Por favor, ingresá tu nombre completo.');
+      tieneErrores = true;
+    }
+    if (email === '' || !email.includes('@')) {
+      mostrarError('email', 'Ingresá un correo electrónico válido.');
+      tieneErrores = true;
+    }
+    
+    // WhatsApp obligatorio ya que para esta campaña lo definimos así en el Front
+    if (whatsapp === '') {
+      mostrarError('whatsapp', 'El número de WhatsApp es obligatorio.');
+      tieneErrores = true;
     }
 
-    // Bloquear botón mientras se procesa
-    btnEnviar.disabled    = true;
-    btnEnviar.textContent = 'Enviando...';
+    if (tieneErrores) return;
+
+    // --- INICIO DEL MOTOR ASÍNCRONO DEL CRM ---
+    
+    // 1. Estado de carga en el botón
+    const btnSubmit = formulario.querySelector('.btn-submit') || formulario.querySelector('button[type="submit"]');
+    const textoOriginalBoton = btnSubmit.innerText;
+    btnSubmit.innerText = 'Reservando promo... ⏳';
+    btnSubmit.disabled = true;
+
+    // 2. Armamos el contrato exacto (Mapeamos whatsapp -> phone)
+    const payload = {
+      name: nombre,
+      email: email,
+      phone: whatsapp,
+      message: "Lead registrado desde Landing Mundial 2026 - Línea Económica Pro"
+    };
 
     try {
-      const respuesta = await fetch(
-        `${LANDING_CRM_URL}/api/landings/${LANDING_ID}/leads`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name:    nombre.trim(),
-            email:   email.trim(),
-            phone:   telefono.trim(),
-            message: null
-          })
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/landings/${LANDING_ID}/leads`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
 
-      if (!respuesta.ok) {
-        const datos = await respuesta.json().catch(() => ({}));
-        throw new Error(datos.error || `Error del servidor (${respuesta.status})`);
+      if (response.ok) {
+        // ÉXITO COMPLETO: Mensaje profesional para el usuario final
+        mostrarFeedbackUsuario(
+          'success', 
+          '¡Golazo! Tu registro fue exitoso. Un asesor de SueñoSimple se contactará con vos por WhatsApp para activar tus descuentos mundialistas.'
+        );
+        formulario.reset();
+      } else {
+        throw new Error('Error en el servidor CRM');
       }
 
-      // Registro exitoso
-      form.reset();
-      form.style.display = 'none';
-      mostrarFeedback('exito', '¡Listo! Te avisamos antes de cada partido. Revisá tu correo.');
-
-    } catch (err) {
-      mostrarFeedback('error', err.message === 'Failed to fetch'
-        ? 'No se pudo conectar con el sistema. Intentá de nuevo en unos segundos.'
-        : err.message
+    } catch (error) {
+      console.error('Error de integración:', error);
+      // ERROR DE CONEXIÓN
+      mostrarFeedbackUsuario(
+        'error', 
+        '¡Ups! Tuvimos un inconveniente temporal para procesar tu solicitud. Por favor, intentá nuevamente en unos minutos.'
       );
-      btnEnviar.disabled    = false;
-      btnEnviar.textContent = 'Registrarme ya';
+    } finally {
+      // Devolvemos el control al botón pase lo que pase
+      btnSubmit.innerText = textoOriginalBoton;
+      btnSubmit.disabled = false;
     }
+    // --- FIN DEL MOTOR ASÍNCRONO ---
   });
+
+  // Funciones de ayuda visual
+  function mostrarError(idInput, mensaje) {
+    const input = document.getElementById(idInput);
+    if (!input) return;
+    input.classList.add('input-error');
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerText = mensaje;
+    input.parentElement.appendChild(errorDiv);
+  }
+
+  function limpiarErrores() {
+    const inputsConError = document.querySelectorAll('.input-error');
+    inputsConError.forEach(input => input.classList.remove('input-error'));
+    const mensajes = document.querySelectorAll('.error-message, .feedback-global');
+    mensajes.forEach(msg => msg.remove());
+  }
+
+  // Inyecta un bloque de feedback UX arriba o abajo del form
+  function mostrarFeedbackUsuario(tipo, mensaje) {
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.className = `feedback-global feedback-${tipo}`; 
+    feedbackDiv.style.padding = '16px';
+    feedbackDiv.style.marginTop = '15px';
+    feedbackDiv.style.borderRadius = '4px';
+    feedbackDiv.style.fontWeight = 'bold';
+    feedbackDiv.style.textAlign = 'center';
+    
+    if (tipo === 'success') {
+      feedbackDiv.style.background = '#dcfce7'; // Verde clarito
+      feedbackDiv.style.color = '#15803d';
+    } else {
+      feedbackDiv.style.background = '#fef2f2'; // Rojo clarito
+      feedbackDiv.style.color = '#b91c1c';
+    }
+    
+    feedbackDiv.innerText = mensaje;
+    formulario.appendChild(feedbackDiv);
+  }
 </script>
 
 </body>
