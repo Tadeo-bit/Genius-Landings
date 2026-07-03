@@ -85,11 +85,11 @@ function get_landing_statuses(): array {
 
 function update_landing_status(int $id, string $new_status): array {
     $payload = json_encode(['status' => $new_status]);
-    $url = LANDING_CRM_URL . '/api/landings/' . $id;
+    $url = LANDING_CRM_URL . '/api/landings/' . $id . '/status';
 
     $context = stream_context_create([
         'http' => [
-            'method'  => 'PUT',
+            'method'  => 'PATCH',
             'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($payload),
             'content' => $payload,
             'timeout' => 4,
