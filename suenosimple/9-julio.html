@@ -72,6 +72,7 @@
   }
   .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--navy); letter-spacing: -0.02em; }
   .logo span { color: var(--gold); }
+  .logo-img { height: 36px; width: auto; object-fit: contain; }
   nav a { text-decoration: none; color: var(--text-light); font-size: 14px; font-weight: 500; transition: color 0.2s; }
   nav a:hover { color: var(--navy); }
   .nav-links { display: flex; gap: 28px; align-items: center; }
@@ -755,7 +756,7 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">Sueño<span>Simple</span></div>
+  <div class="logo"><img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="logo-img"></div>
   <div class="nav-links">
     <a href="#productos">Colchones</a>
     <a href="#testimonios">Reseñas</a>
@@ -970,6 +971,46 @@
   </div>
 </section>
 
+</section> <section class="section" id="testimonios-video" style="background: var(--white); border-top: 1px solid rgba(26,31,58,0.06); position: relative; z-index: 2;">
+  <div class="section-header fade-up">
+    <p class="section-eyebrow">Experiencias Reales</p>
+    <h2 class="section-title">Historias de descanso en video</h2>
+    <p class="section-sub">Descubrí por qué miles de argentinos en todo el país eligen cambiar sus noches con SueñoSimple.</p>
+  </div>
+
+  <div class="products-grid"> 
+    <div class="product-card fade-up" style="cursor: default;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Mateo" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Mateo Fernández</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Mendoza</p>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" style="cursor: default; transition-delay: 0.1s;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Sofía" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Sofía Rodríguez</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Córdoba</p>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" style="cursor: default; transition-delay: 0.2s;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Martín" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Martín Gómez</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Buenos Aires</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CALCULATOR -->
 <section class="calculator-section" id="calculadora">
   <div class="section-header fade-up">
@@ -1115,7 +1156,7 @@
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <span class="logo">Sueño<span>Simple</span></span>
+      <span class="logo"><img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="logo-img"></span>
       <p class="footer-desc">Colchones de calidad real a precios accesibles. Dormir bien no debería ser un lujo.</p>
     </div>
     <div class="footer-col">
