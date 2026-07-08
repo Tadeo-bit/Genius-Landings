@@ -1064,37 +1064,40 @@
         <p class="form-subtitle">Completá el formulario y un asesor te contacta por WhatsApp con tu descuento exclusivo y la disponibilidad del modelo que elegiste.</p>
 
         <form id="form-madre" novalidate>
-          <div class="form-grid">
+          <!-- Fila 1: Nombre y WhatsApp juntos usando la estructura del proyecto -->
+          <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px;">
             <div class="form-field">
-              <label for="nombre">Nombre *</label>
-              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" autocomplete="given-name">
-              <span class="field-error" id="err-nombre"></span>
+              <label for="nombre_completo">Nombre Completo *</label>
+              <input type="text" id="nombre_completo" name="nombre_completo" placeholder="Tu nombre y apellido" autocomplete="name">
+              <span class="field-error" id="err-nombre" style="color: var(--error); font-size: 0.8rem; font-weight: 500; margin-top: 2px;"></span>
             </div>
-            <div class="form-field">
-              <label for="apellido">Apellido</label>
-              <input type="text" id="apellido" name="apellido" placeholder="Tu apellido" autocomplete="family-name">
-            </div>
-            <div class="form-field">
-              <label for="email">Email *</label>
-              <input type="email" id="email" name="email" placeholder="tu@email.com" autocomplete="email">
-              <span class="field-error" id="err-email"></span>
-            </div>
+            
             <div class="form-field">
               <label for="whatsapp">WhatsApp *</label>
               <input type="tel" id="whatsapp" name="whatsapp" placeholder="11 2345-6789">
-              <span class="field-error" id="err-whatsapp"></span>
-            </div>
-            <div class="form-field full">
-              <label for="producto">Producto de interés</label>
-              <select id="producto" name="producto">
-                <option value="Económica Pro">Económica Pro — $71.400 (−40%)</option>
-                <option value="Descanso Plus">Descanso Plus — $62.300 (−30%)</option>
-                <option value="Sommier Premium">Sommier Premium — $122.850 (−35%)</option>
-                <option value="No estoy segura">Todavía no sé, necesito asesoramiento</option>
-              </select>
+              <span class="field-error" id="err-whatsapp" style="color: var(--error); font-size: 0.8rem; font-weight: 500; margin-top: 2px;"></span>
             </div>
           </div>
+
+          <!-- Campos individuales de ancho completo -->
+          <div class="form-field" style="margin-bottom: 20px;">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.com" autocomplete="email">
+            <span class="field-error" id="err-email" style="color: var(--error); font-size: 0.8rem; font-weight: 500; margin-top: 2px;"></span>
+          </div>
+
+          <div class="form-field" style="margin-bottom: 25px;">
+            <label for="producto">Producto de interés</label>
+            <select id="producto" name="producto">
+              <option value="Económica Pro">Económica Pro — $71.400 (−40%)</option>
+              <option value="Descanso Plus">Descanso Plus — $62.300 (−30%)</option>
+              <option value="Sommier Premium">Sommier Premium — $122.850 (−35%)</option>
+              <option value="No estoy segura">Todavía no sé, necesito asesoramiento</option>
+            </select>
+          </div>
+
           <button type="submit" class="btn-submit" id="btn-submit">Quiero mi descuento →</button>
+          
           <p class="form-disclaimer">
             Al enviar aceptás nuestra <a href="https://suenosimple.com/privacidad" target="_blank">política de privacidad</a>.
             No hacemos spam. Te contactamos solo para enviarte tu oferta.
@@ -1153,11 +1156,9 @@
   const formulario = document.getElementById('form-madre');
   const feedback = document.getElementById('form-feedback');
 
-  // Hardcodeo temporal para desarrollo local
   const LANDING_ID = 6; 
   const API_BASE_URL = 'http://localhost:3000';
 
-  // Función accesoria para preseleccionar productos desde las tarjetas comerciales
   function scrollToForm(nombreProducto) {
     const selector = document.getElementById('producto');
     if (selector) {
@@ -1172,27 +1173,30 @@
   formulario.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // 1. Resetear estados de error y feedback visual rápido
+    // Resetear errores y feedbacks
     document.getElementById('err-nombre').innerText = '';
     document.getElementById('err-email').innerText = '';
     document.getElementById('err-whatsapp').innerText = '';
     feedback.classList.add('hidden');
-    feedback.className = ''; // Limpiamos clases previas de éxito/error
+    feedback.className = ''; 
 
-    // 2. Capturar valores reales del nuevo layout de Ale
-    const nombre = document.getElementById('nombre').value.trim();
-    const apellido = document.getElementById('apellido').value.trim();
+    // Capturar los nuevos valores del formulario reducido
+    const nombre = document.getElementById('nombre_completo').value.trim();
     const mail = document.getElementById('email').value.trim();
     const whatsapp = document.getElementById('whatsapp').value.trim();
     const productoSeleccionado = document.getElementById('producto').value;
 
     let tieneErrores = false;
 
-    // 3. Validaciones de Frontend obligatorias según el contrato (Nombre, Email y WhatsApp)
+    // Validar el input unificado (que no esté vacío y tenga al menos nombre y apellido)
     if (nombre === '') {
-      document.getElementById('err-nombre').innerText = 'El nombre es obligatorio.';
+      document.getElementById('err-nombre').innerText = 'El nombre completo es obligatorio.';
+      tieneErrores = true;
+    } else if (!nombre.includes(' ')) {
+      document.getElementById('err-nombre').innerText = 'Por favor, ingresá tu nombre y apellido.';
       tieneErrores = true;
     }
+
     if (mail === '' || !mail.includes('@')) {
       document.getElementById('err-email').innerText = 'Ingrese un correo válido con formato @.';
       tieneErrores = true;
@@ -1202,25 +1206,25 @@
       tieneErrores = true;
     }
 
-    // 4. Si hay errores de validación local, frenamos la ejecución
     if (tieneErrores) return;
 
-    // 5. Feedback visual al botón: Cambiar estado a "Enviando..." para evitar doble clic
+    // Bloquear botón de envío
     const btnSubmit = document.getElementById('btn-submit');
     const textoOriginalBoton = btnSubmit.innerText;
     btnSubmit.innerText = 'Enviando...';
     btnSubmit.disabled = true;
 
-    // 6. Construir el Contrato de Datos (Payload) exacto mapeando variables a la API
-    const nombreCompleto = apellido ? `${nombre} ${apellido}` : nombre;
+    // Payload adaptado (mantiene el contrato exacto de la API)
     const payload = {
-      name: nombreCompleto,
+      name: nombre, // Envía el nombre completo directo
       email: mail,
       phone: whatsapp,
       message: `Lead registrado desde Landing Día de la Madre. Interés en: ${productoSeleccionado}`
     };
 
-    // 7. Envío asíncrono mediante fetch
+    // Variable para rastrear si el envío fue exitoso
+    let envioExitoso = false;
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/landings/${LANDING_ID}/leads`, {
         method: 'POST',
@@ -1231,25 +1235,32 @@
       });
 
       if (response.ok) {
-        // ÉXITO: Copy emocional y de marca solicitado
         feedback.className = 'feedback-success';
         feedback.innerHTML = '<strong>¡Tu solicitud fue recibida con éxito!</strong> Un asesor experto en descanso se comunicará con vos para ayudarte a elegir el regalo perfecto para mamá. ¡Gracias por confiar en SueñoSimple!';
         feedback.classList.remove('hidden');
         formulario.reset();
+        
+        // Marcase como exitoso
+        envioExitoso = true; 
+        
+        // El botón queda desactivado permanentemente con el mensaje de éxito
+        btnSubmit.innerText = '¡Enviado con éxito! ✨';
+        btnSubmit.disabled = true;
       } else {
         throw new Error('Error en la respuesta del servidor');
       }
 
     } catch (error) {
-      // ERROR DE CONEXIÓN O SERVIDOR INTERNO
       feedback.className = 'feedback-error';
-      feedback.innerHTML = '<strong>Error:</strong> No fue posible enviar la solicitud al CRM (¿Está el servidor encendido?).';
+      feedback.innerHTML = '<strong>Error:</strong> ¡Ups! Tuvimos un problema técnico momentáneo.';
       feedback.classList.remove('hidden');
       console.error('Hubo un problema con la petición fetch:', error);
     } finally {
-      // CORREGIDO: Se restaura el estado operativo del botón pase lo que pase
-      btnSubmit.innerText = textoOriginalBoton;
-      btnSubmit.disabled = false;
+      // Si NO fue exitoso (hubo error), le devolvemos la vida al botón para reintentar
+      if (!envioExitoso) {
+        btnSubmit.innerText = textoOriginalBoton;
+        btnSubmit.disabled = false;
+      }
     }
   });
 </script>
