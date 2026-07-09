@@ -554,13 +554,11 @@
       tieneErrores = true;
     }
 
-    // COMENTAMOS la validación del celular porque el PDF dice que es OPCIONAL
-    /*
+    // Celular obligatorio (requerido para contacto por WhatsApp)
     if (celular === '') {
       document.getElementById('error-celular').classList.remove('hidden');
       tieneErrores = true;
     }
-    */
 
     // 4. Si hay errores, frenamos la ejecución
     if (tieneErrores) return;
