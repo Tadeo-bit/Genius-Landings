@@ -156,7 +156,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
   <div class="admin-header">
     <strong>Genius Landings - Admin</strong>
-    <a href="index.php"> Inicio</a>
+    <div style="display:flex;gap:16px;align-items:center;">
+      <a href="index.php">Inicio</a>
+      <a href="history.php?entity=landing">Historial</a>
+    </div>
   </div>
 
   <div class="admin-main">
