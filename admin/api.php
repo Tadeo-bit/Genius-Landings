@@ -31,7 +31,11 @@ function normalize_text(string $value): string {
 }
 
 function api_get(string $url): array {
-    $context  = stream_context_create(['http' => ['timeout' => 3]]);
+    $real_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $context  = stream_context_create(['http' => [
+        'timeout' => 3,
+        'header' => "X-Forwarded-For: $real_ip\r\n"
+    ]]);
     $response = @file_get_contents($url, false, $context);
     if ($response === false) return [];
     return json_decode($response, true) ?? [];
@@ -86,11 +90,12 @@ function get_landing_statuses(): array {
 function update_landing_status(int $id, string $new_status): array {
     $payload = json_encode(['status' => $new_status]);
     $url = LANDING_CRM_URL . '/api/landings/' . $id . '/status';
+    $real_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 
     $context = stream_context_create([
         'http' => [
             'method'  => 'PATCH',
-            'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($payload),
+            'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\nX-Forwarded-For: $real_ip",
             'content' => $payload,
             'timeout' => 4,
             'ignore_errors' => true,
@@ -154,4 +159,22 @@ function build_clients_catalog(array $campaigns, array $landings): array {
     }
 
     return $catalog;
+}
+
+function get_campaign_history(array $filters = []): array {
+    $url = BUDGET_MANAGER_URL . '/api/campaigns/history';
+    if (!empty($filters)) $url .= '?' . http_build_query($filters);
+    return api_get($url);
+}
+
+function get_landing_history(array $filters = []): array {
+    $url = LANDING_CRM_URL . '/api/history';
+    if (!empty($filters)) $url .= '?' . http_build_query($filters);
+    return api_get($url);
+}
+
+function get_all_history(array $filters = []): array {
+    $budget = get_campaign_history($filters);
+    $crm    = get_landing_history($filters);
+    return array_merge($budget, $crm);
 }

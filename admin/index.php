@@ -56,6 +56,7 @@ function count_campaigns_for(array $campaigns, string $client): int {
     <div>
       <a href="/">&#8592; Panel público</a>
       <a href="clientes.php" style="margin-left:16px;">Gestionar clientes</a>
+      <a href="history.php" style="margin-left:16px;">Historial</a>
     </div>
   </div>
 
