@@ -33,10 +33,17 @@ $crm_history    = api_get(LANDING_CRM_URL . '/api/history');
 $filter_entity    = $_GET['entity']    ?? '';
 $filter_action    = $_GET['action']    ?? '';
 $filter_user      = $_GET['user']      ?? '';
+$filter_client    = $_GET['client']    ?? '';
 $filter_date_from = $_GET['date_from'] ?? '';
 $filter_date_to   = $_GET['date_to']   ?? '';
 
 $all_history = array_merge($budget_history, $crm_history);
+
+foreach ($all_history as &$entry) {
+    $state = $entry['afterState'] ?? $entry['beforeState'] ?? [];
+    $entry['_client'] = $state['client'] ?? '-';
+}
+unset($entry);
 
 if ($filter_entity) {
     $all_history = array_values(array_filter($all_history, fn($e) => ($e['entityType'] ?? '') === $filter_entity));
@@ -47,6 +54,11 @@ if ($filter_action) {
 if ($filter_user && $filter_user !== '*') {
     $all_history = array_values(array_filter($all_history, function($e) use ($filter_user) {
         return match_user_filter($e['user'] ?? '', $filter_user);
+    }));
+}
+if ($filter_client) {
+    $all_history = array_values(array_filter($all_history, function($e) use ($filter_client) {
+        return ($e['_client'] ?? '') === $filter_client;
     }));
 }
 if ($filter_date_from) {
@@ -193,7 +205,8 @@ if ($base_path === '.' || $base_path === '') $base_path = '';
       border-radius:6px;
       border:1px solid #e2e8f0;
       font-size:.78rem;
-      max-height:300px;
+      max-height:400px;
+      min-width:320px;
       overflow:auto;
     }
     .detail-panel pre {
@@ -248,6 +261,14 @@ if ($base_path === '.' || $base_path === '') $base_path = '';
         </select>
       </div>
       <div class="filter-group">
+        <label>Cliente</label>
+        <select name="client">
+          <option value="">Todos</option>
+          <option value="SueñoSimple" <?= $filter_client === 'SueñoSimple' ? 'selected' : '' ?>>SueñoSimple</option>
+          <option value="TechStore" <?= $filter_client === 'TechStore' ? 'selected' : '' ?>>TechStore</option>
+        </select>
+      </div>
+      <div class="filter-group">
         <label>Acción</label>
         <select name="action">
           <option value="">Todas</option>
@@ -288,6 +309,7 @@ if ($base_path === '.' || $base_path === '') $base_path = '';
             <th>Fecha</th>
             <th>Entidad</th>
             <th>ID</th>
+            <th>Cliente</th>
             <th>Acción</th>
             <th>Usuario</th>
             <th>Cambios</th>
@@ -306,6 +328,7 @@ if ($base_path === '.' || $base_path === '') $base_path = '';
                 <span class="badge-entity <?= $ent_class ?>"><?= $entity_labels[$ent] ?? $ent ?></span>
               </td>
               <td><?= $entry['entityId'] ?? '-' ?></td>
+              <td><?= htmlspecialchars($entry['_client'] ?? '-') ?></td>
               <td>
                 <?php
                   $act = $entry['action'] ?? 'unknown';

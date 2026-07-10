@@ -88,6 +88,7 @@ function count_campaigns_for(array $campaigns, string $client): int {
           </div>
           <a href="<?= $base_path ?>/landings.php?cliente=<?= urlencode($c['nombre']) ?>" class="btn btn-primary">Gestionar landings</a>
           <a href="<?= $base_path ?>/panel.php?carpeta=<?= urlencode($c['carpeta']) ?>" class="btn btn-secondary">Ver panel</a>
+          <a href="http://localhost:5173/campaigns" target="_blank" class="btn btn-secondary">Editar campañas</a>
         </div>
       <?php endforeach; ?>
     </div>
