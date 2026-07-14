@@ -1,386 +1,568 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descansá como un campeón - SueñoSimple</title>
-    <style>
-  /* 1. RESET Y BASE (Idéntico a Económica Pro) */
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mundial 2026 — SueñoSimple</title>
+<style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #2563eb;
+    --blue-dark:  #1d4ed8;
+    --blue-light: #eff6ff;
+    --blue-mid:   #bfdbfe;
+    --navy:       #0f172a;
+    --white:      #ffffff;
+    --gray-bg:    #f8fafc;
+    --gray-border:#e2e8f0;
+    --gray-text:  #64748b;
+    --text:       #0f172a;
+    --red:        #dc2626;
+    --green:      #16a34a;
+  }
+
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #ffffff;
-    color: #0f172a;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
   }
 
-  /* 2. BARRA DE RETORNO */
-  .back-bar {
-    background: #f8fafc;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 10px 32px;
-    font-size: 0.82rem;
-  }
-  .back-bar a {
-    color: #2563eb;
-    text-decoration: none;
-  }
+  /* BACK BAR */
+  .back-bar { background: var(--gray-bg); border-bottom: 1px solid var(--gray-border); padding: 9px 32px; font-size: 0.8rem; }
+  .back-bar a { color: var(--blue); text-decoration: none; }
   .back-bar a:hover { text-decoration: underline; }
 
-  /* 3. HEADER (Para el logo y WhatsApp) */
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 32px;
-    background: #ffffff;
-    max-width: 960px;
-    margin: 0 auto;
+  /* COUNTDOWN STRIP */
+  .match-strip {
+    background: var(--blue); color: var(--white);
+    text-align: center; padding: 10px 20px; font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    position: sticky; top: 0; z-index: 100; letter-spacing: 0.04em;
   }
-  header .logo { height: 32px; width: auto; }
-  header .btn-whatsapp {
-    color: #2563eb;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 600;
+  .match-strip strong { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .strip-timer {
+    display: inline-flex; gap: 4px; font-size: 17px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    background: rgba(255,255,255,0.15); padding: 3px 12px; border-radius: 4px;
   }
-  header .btn-whatsapp:hover { text-decoration: underline; }
+  .strip-sep { opacity: 0.6; }
+  .strip-live {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2);
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  }
+  .strip-live::before { content: ''; width: 7px; height: 7px; background: #86efac; border-radius: 50%; animation: blink 1s step-start infinite; }
+  @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0; } }
 
-  /* 4. HERO (Mismo look corporativo de fondo oscuro) */
-  .hero {
-    background: #0f172a;
-    color: #fff;
-    text-align: center;
-    padding: 80px 24px;
-  }
-  .hero h1 {
-    font-size: 2.8rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 16px;
-    letter-spacing: -0.03em;
-  }
-  /* Resaltamos la palabra "campeón" con el azul claro oficial */
-  .hero h1 span { color: #60a5fa; }
+  /* NAV */
+  nav { background: var(--white); border-bottom: 1px solid var(--gray-border); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; }
+  .logo-img { height: 36px; width: auto; object-fit: contain; }
+  .nav-right { display: flex; align-items: center; gap: 24px; }
+  .nav-link { font-size: 13.5px; color: var(--gray-text); text-decoration: none; font-weight: 500; transition: color 0.15s; }
+  .nav-link:hover { color: var(--blue); }
+  .btn-wa { display: inline-flex; align-items: center; gap: 7px; background: #25D366; color: var(--white); padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; text-decoration: none; transition: background 0.15s, transform 0.15s; }
+  .btn-wa:hover { background: #1EBE59; transform: translateY(-1px); }
 
-  .hero p {
-    font-size: 1.1rem;
-    color: #94a3b8;
-    max-width: 560px;
-    margin: 0 auto 32px;
-    line-height: 1.65;
-  }
+  /* HERO */
+  .hero { background: var(--white); padding: 80px 40px 64px; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 340px; gap: 60px; align-items: center; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 7px; background: var(--blue-light); color: var(--blue-dark); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px; border: 1px solid var(--blue-mid); width: fit-content; }
+  .hero h1 { font-size: clamp(34px, 4.2vw, 58px); font-weight: 900; line-height: 1.08; letter-spacing: -0.03em; color: var(--navy); margin-bottom: 20px; }
+  .hero h1 .accent { color: var(--blue); }
+  .hero h1 .sub { display: block; font-size: 0.58em; font-weight: 400; color: var(--gray-text); letter-spacing: -0.01em; line-height: 1.6; margin-top: 14px; }
+  .hero-desc { font-size: 16px; color: var(--gray-text); line-height: 1.7; max-width: 480px; margin-bottom: 36px; }
+  .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-primary { background: var(--blue); color: var(--white); padding: 14px 32px; border-radius: 7px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: background 0.15s, transform 0.15s; display: inline-block; }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--text); padding: 14px 28px; border-radius: 7px; font-size: 15px; font-weight: 600; text-decoration: none; border: 1.5px solid var(--gray-border); transition: border-color 0.15s, color 0.15s; display: inline-block; }
+  .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
 
-  /* 5. BOTÓN PRINCIPAL (Copiado de .btn-hero-primary) */
-  .btn-cta, .btn-submit {
-    display: inline-block;
-    background: #2563eb;
-    color: #fff;
-    padding: 14px 32px;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 700;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: background 0.15s;
-    text-align: center;
-  }
-  .btn-cta:hover, .btn-submit:hover { background: #1d4ed8; }
+  /* Hero side cards */
+  .hcard { background: var(--white); border: 1px solid var(--gray-border); border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; color: var(--navy); box-shadow: 0 2px 10px rgba(15,23,42,0.06); margin-bottom: 10px; animation: slide-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .hcard:nth-child(2){ animation-delay:.15s; }
+  .hcard:nth-child(3){ animation-delay:.3s; }
+  .hcard:nth-child(4){ animation-delay:.45s; }
+  @keyframes slide-in { from{ opacity:0; transform:translateX(20px); } to{ opacity:1; transform:translateX(0); } }
+  .hcard-icon { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .hcard small { display: block; font-size: 11px; color: var(--gray-text); font-weight: 400; margin-top: 1px; }
 
-  /* 6. SECCIÓN FORMULARIO (Estilo Match Sale con fondo gris claro) */
-  .match-sale-section {
-    background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 64px 24px;
-    text-align: center;
-  }
-  .match-sale-section h2 {
-    font-size: 2rem;
-    font-weight: 800;
-    margin-bottom: 8px;
-    letter-spacing: -0.02em;
-  }
-  .match-sale-section p {
-    font-size: 1rem;
-    color: #64748b;
-    line-height: 1.7;
-    max-width: 540px;
-    margin: 0 auto 28px;
-  }
+  /* MATCH SALE */
+  .match-sale { background: var(--blue); color: var(--white); padding: 60px 40px; text-align: center; }
+  .ms-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 12px; }
+  .ms-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); color: var(--white); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 20px; }
+  .ms-badge::before { content: ''; width: 7px; height: 7px; background: #86efac; border-radius: 50%; animation: blink 1s step-start infinite; }
+  .match-sale h2 { font-size: clamp(26px, 3.5vw, 44px); font-weight: 900; letter-spacing: -0.025em; margin-bottom: 8px; line-height: 1.1; }
+  .match-sale p { font-size: 15px; color: rgba(255,255,255,0.65); max-width: 500px; margin: 0 auto 36px; line-height: 1.6; }
+  .ms-timer { display: inline-flex; gap: 0; border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; margin-bottom: 36px; }
+  .ms-unit { padding: 18px 28px; display: flex; flex-direction: column; align-items: center; gap: 4px; border-right: 1px solid rgba(255,255,255,0.12); }
+  .ms-unit:last-child { border-right: none; }
+  .ms-val { font-size: 40px; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ms-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.5; }
+  .btn-white { background: var(--white); color: var(--blue); padding: 14px 40px; border-radius: 7px; font-size: 15px; font-weight: 700; text-decoration: none; border: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s; display: inline-block; }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
 
-  /* 7. TARJETA CONTENEDORA DEL FORMULARIO */
-  #form-mundial {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 32px;
-    max-width: 450px;
-    margin: 0 auto;
-    text-align: left;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Sombra sutil profesional */
-  }
-  .form-group {
-    margin-bottom: 20px;
-  }
-  .form-group label {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #334155;
-    margin-bottom: 6px;
-  }
-  .form-group input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: #0f172a;
-    transition: border-color 0.15s;
-  }
-  .form-group input:focus {
-    outline: none;
-    border-color: #2563eb; /* Se ilumina en azul al hacer clic */
-  }
-  .btn-submit {
-    width: 100%;
-    margin-top: 8px;
-  }
+  /* FEATURES STRIP */
+  .features-strip { background: var(--gray-bg); border-top: 1px solid var(--gray-border); border-bottom: 1px solid var(--gray-border); padding: 32px 40px; display: grid; grid-template-columns: repeat(4,1fr); }
+  .feat { display: flex; align-items: flex-start; gap: 12px; padding: 0 24px; border-right: 1px solid var(--gray-border); }
+  .feat:first-child { padding-left: 0; }
+  .feat:last-child { border-right: none; }
+  .feat-icon { width: 36px; height: 36px; background: var(--blue-light); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .feat-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+  .feat-desc { font-size: 11.5px; color: var(--gray-text); line-height: 1.5; }
 
-  /* 8. CLASES PARA ADVERTENCIAS (Uso de mañana en JS) */
-  .error-message {
-    color: #dc2626;
-    font-size: 0.8rem;
-    margin-top: 4px;
-    font-weight: 500;
-  }
-  .input-error {
-    border-color: #dc2626 !important;
-  }
+  /* SECTIONS */
+  .section { padding: 72px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+  .section-title { font-size: clamp(24px, 3vw, 38px); font-weight: 900; letter-spacing: -0.025em; color: var(--navy); margin-bottom: 8px; line-height: 1.1; }
+  .section-sub { font-size: 15px; color: var(--gray-text); line-height: 1.65; max-width: 520px; margin-bottom: 40px; }
 
-  /* FEEDBACK DEL FORMULARIO */
-  #form-feedback {
-    max-width: 450px;
-    margin: 16px auto 0 auto;
-    padding: 14px 18px;
-    border-radius: 6px;
-    font-size: .93rem;
-    font-weight: 500;
-    text-align: center;
-  }
+  /* PRODUCTS */
+  .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .product-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 12px; overflow: hidden; transition: box-shadow .25s, transform .25s; position: relative; }
+  .product-card:hover { box-shadow: 0 12px 40px rgba(15,23,42,.09); transform: translateY(-4px); }
+  .product-card.featured { border-color: var(--blue); border-width: 2px; }
+  .product-img-area { height: 180px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .mattress-css { position: relative; width: 200px; animation: float-soft 4s ease-in-out infinite; }
+  @keyframes float-soft { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+  .mc-top { height: 50px; width: 100%; border-radius: 10px 10px 4px 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; position: relative; overflow: hidden; }
+  .mc-top::after { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background-image: repeating-linear-gradient(90deg,transparent,transparent 28px,rgba(255,255,255,.12) 28px,rgba(255,255,255,.12) 30px); }
+  .mc-base { height: 22px; width: 100%; border-radius: 0 0 8px 8px; }
+  .badge-top { position:absolute; top:12px; left:12px; background:var(--blue); color:var(--white); font-size:10px; font-weight:700; padding:4px 10px; border-radius:4px; letter-spacing:.06em; }
+  .badge-pct { position:absolute; top:12px; right:12px; background:var(--red); color:var(--white); font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; }
+  .product-body { padding: 20px; }
+  .product-name { font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 5px; }
+  .product-desc { font-size: 12.5px; color: var(--gray-text); line-height: 1.55; margin-bottom: 14px; }
+  .price-row { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 6px; }
+  .price-now { font-size: 28px; font-weight: 900; color: var(--navy); letter-spacing: -0.02em; }
+  .price-was { font-size: 14px; color: var(--gray-text); text-decoration: line-through; }
+  .cuotas { font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-light); padding: 5px 10px; border-radius: 5px; margin-bottom: 16px; display: inline-block; }
+  .btn-add { width: 100%; background: var(--navy); color: var(--white); border: none; border-radius: 7px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .15s, transform .1s; }
+  .btn-add:hover { background: var(--blue); }
+  .btn-add:active { transform: scale(.98); }
+
+  /* TESTIMONIALS */
+  .testi-section { background: var(--gray-bg); padding: 72px 40px; border-top: 1px solid var(--gray-border); border-bottom: 1px solid var(--gray-border); }
+  .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 36px; }
+  .testi-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 10px; padding: 24px; transition: box-shadow .25s, transform .25s; }
+  .testi-card:hover { box-shadow: 0 8px 28px rgba(15,23,42,.07); transform: translateY(-3px); }
+  .testi-source { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; color: var(--green); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px; }
+  .testi-source::before { content:'✓'; background:var(--green); color:#fff; border-radius:50%; width:15px; height:15px; font-size:8px; display:flex; align-items:center; justify-content:center; font-weight:700; flex-shrink:0; }
+  .stars { color: #f59e0b; font-size: 12px; letter-spacing: 2px; margin-bottom: 10px; }
+  .testi-text { font-size: 13.5px; color: var(--gray-text); line-height: 1.65; margin-bottom: 16px; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 10px; }
+  .testi-av { width: 34px; height: 34px; border-radius: 50%; background: var(--blue-light); color: var(--blue-dark); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .testi-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .testi-loc { font-size: 11px; color: var(--gray-text); }
+
+  /* TRUST STRIP */
+  .trust-strip { display: grid; grid-template-columns: repeat(4,1fr); border-top: 1px solid var(--gray-border); border-bottom: 1px solid var(--gray-border); }
+  .trust-item { padding: 26px 22px; display: flex; align-items: flex-start; gap: 12px; border-right: 1px solid var(--gray-border); }
+  .trust-item:last-child { border-right: none; }
+  .trust-icon { font-size: 20px; width: 38px; height: 38px; background: var(--blue-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .trust-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .trust-desc { font-size: 11.5px; color: var(--gray-text); line-height: 1.5; }
+
+  /* LOGISTICS */
+  .logistics-section { padding: 72px 40px; max-width: 1100px; margin: 0 auto; }
+  .logistics-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-top: 36px; }
+  .log-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 10px; padding: 28px 22px; position: relative; overflow: hidden; transition: box-shadow .25s, transform .25s; }
+  .log-card:hover { box-shadow: 0 8px 28px rgba(15,23,42,.07); transform: translateY(-3px); }
+  .log-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--blue); }
+  .log-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+  .log-title { font-size: 15px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+  .log-desc { font-size: 13px; color: var(--gray-text); line-height: 1.6; }
+  .log-tag { display: inline-block; margin-top: 12px; background: var(--blue-light); color: var(--blue-dark); font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: .06em; text-transform: uppercase; }
+  .zone-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 36px; padding: 16px 22px; background: var(--gray-bg); border: 1px solid var(--gray-border); border-radius: 8px; }
+  .zone-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--gray-text); }
+  .zone-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* FORM */
+  .form-outer { background: var(--gray-bg); border-top: 1px solid var(--gray-border); padding: 72px 40px; }
+  .form-inner { max-width: 580px; margin: 0 auto; text-align: center; }
+  .form-card { background: var(--white); border: 1px solid var(--gray-border); border-radius: 12px; padding: 38px; box-shadow: 0 4px 16px rgba(15,23,42,.05); margin-top: 32px; text-align: left; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-field { margin-bottom: 16px; }
+  .form-field label { display: block; font-size: 11.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px; letter-spacing: .04em; text-transform: uppercase; }
+  .form-field input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--gray-border); border-radius: 7px; font-size: 14px; color: var(--text); background: var(--white); outline: none; transition: border-color .15s; }
+  .form-field input:focus { border-color: var(--blue); }
+  .input-error { border-color: var(--red) !important; }
+  .error-msg { color: var(--red); font-size: 11px; margin-top: 4px; font-weight: 500; }
+  .btn-submit { width: 100%; background: var(--blue); color: var(--white); border: none; border-radius: 7px; padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s, transform .15s; margin-top: 4px; }
+  .btn-submit:hover { background: var(--blue-dark); transform: translateY(-1px); }
+  .btn-submit:disabled { background: #93c5fd; cursor: not-allowed; transform: none; }
+  .form-trust-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 14px; }
+  .form-trust-item { font-size: 11.5px; color: var(--gray-text); display: flex; align-items: center; gap: 4px; }
+  #form-feedback { padding: 12px 16px; border-radius: 7px; font-size: 13px; font-weight: 500; text-align: center; margin-top: 14px; }
   #form-feedback.hidden { display: none; }
-  #form-feedback.exito  { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-  #form-feedback.error  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  #form-feedback.exito { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  #form-feedback.error  { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
 
-  /* Estado del botón mientras envía */
-  .btn-submit:disabled { background-color: #93c5fd; cursor: not-allowed; }
+  /* FOOTER */
+  footer { background: var(--navy); color: rgba(255,255,255,.9); padding: 52px 40px 28px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto 36px; }
+  .footer-logo { height: 30px; object-fit: contain; margin-bottom: 12px; filter: brightness(0) invert(1); }
+  .footer-desc { font-size: 12.5px; color: rgba(255,255,255,.4); line-height: 1.7; margin-bottom: 16px; }
+  .footer-seals { display: flex; flex-wrap: wrap; gap: 7px; }
+  .footer-seal { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 5px; padding: 4px 9px; font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,.5); }
+  .footer-col h4 { font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 14px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-col ul li a { font-size: 13px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .15s; }
+  .footer-col ul li a:hover { color: rgba(255,255,255,.9); }
+  .footer-bottom { max-width: 1100px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,.07); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,.25); }
+  .footer-flag { font-size: 12px; color: rgba(255,255,255,.4); }
 
-  .footer {
-  background: #0f172a;
-  color: #64748b;
-  text-align: center;
-  padding: 28px 24px;
-  font-size: 0.82rem;
-  border-top: 1px solid #1e293b; /* Un borde sutil para separar del fondo claro */
-}
+  /* FLOATING WHATSAPP */
+  .wa-float { position: fixed; bottom: 24px; right: 24px; z-index: 200; background: #25D366; color: var(--white); border-radius: 50px; padding: 13px 22px; font-size: 14px; font-weight: 700; text-decoration: none; box-shadow: 0 6px 24px rgba(37,211,102,.4); display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(70px); transition: opacity .3s, transform .3s, box-shadow .2s; }
+  .wa-float.visible { opacity: 1; transform: translateY(0); }
+  .wa-float:hover { box-shadow: 0 10px 32px rgba(37,211,102,.5); transform: translateY(-2px); }
 
-.footer a { 
-  color: #94a3b8; 
-  text-decoration: none; 
-}
-
-.footer a:hover { 
-  text-decoration: underline; 
-}
+  /* TOAST */
+  .toast { position: fixed; bottom: 80px; right: 24px; z-index: 400; background: var(--navy); color: var(--white); padding: 12px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 500; display: flex; align-items: center; gap: 9px; border-left: 3px solid var(--blue); box-shadow: 0 4px 16px rgba(15,23,42,.15); opacity: 0; transform: translateY(80px); transition: opacity .3s, transform .3s; }
+  .toast.show { opacity: 1; transform: translateY(0); }
 
   /* RESPONSIVE */
-  @media (max-width: 640px) {
-    .hero h1 { font-size: 2.2rem; }
-    header { padding: 16px 24px; }
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 56px 24px 48px; }
+    .hero-visual { display: none; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .features-strip { grid-template-columns: 1fr 1fr; padding: 24px; gap: 16px; }
+    .feat { border-right: none; padding: 0; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .trust-strip { grid-template-columns: 1fr 1fr; }
+    .trust-item { border-right: none; border-bottom: 1px solid var(--gray-border); }
+    .logistics-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .section, .form-outer, .logistics-section, .testi-section, footer { padding-left: 24px; padding-right: 24px; }
+    .form-row { grid-template-columns: 1fr; }
+    .form-card { padding: 26px 20px; }
+    .ms-unit { padding: 14px 18px; }
+    .ms-val { font-size: 32px; }
+  }
+  @media (max-width: 560px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    nav { padding: 12px 20px; }
+    .nav-right .nav-link { display: none; }
+    .trust-strip { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-    <div class="back-bar">
-        <a href="index.html">← Volver a SueñoSimple</a>
-    </div>   
 
-    <header>
-        <img src="../img/logo-suenosimple.png" alt="Logo SueñoSimple" class="logo"> <!-- El logo del drive que optimizarás -->
-        <a href="https://wa.me/tu-numero" class="btn-whatsapp">Hablar por WhatsApp</a>
-    </header>
+<div class="back-bar"><a href="index.html">← Volver a SueñoSimple</a></div>
 
-    <!-- SECCIÓN HERO: Primer impacto visual -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>Descansá como un <span>campeón</span> para alentar a la selección.</h1>
-    <p>Dormir bien no debería ser un lujo, especialmente en meses de pasión mundialista. Aprovechá nuestras ofertas con precio honesto y entrega rápida.</p>
-    <a href="#registro" class="btn-cta">Quiero mi descuento mundial</a>
+<!-- COUNTDOWN STRIP -->
+<div class="match-strip">
+  <span class="strip-live">MATCH SALE</span>
+  <span>⚽ La oferta termina en</span>
+  <div class="strip-timer">
+    <span id="t-h">00</span><span class="strip-sep">:</span><span id="t-m">00</span><span class="strip-sep">:</span><span id="t-s">00</span>
   </div>
-  <!-- Aquí va la imagen aspiracional optimizada de la familia viendo el partido -->
+  <span>🇦🇷</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="logo-img">
+  <div class="nav-right">
+    <a href="#productos" class="nav-link">Colchones</a>
+    <a href="#resenas" class="nav-link">Reseñas</a>
+    <a href="#registro" class="nav-link">Registrarme</a>
+    <a href="https://wa.me/5491100000000" class="btn-wa" target="_blank" rel="noopener noreferrer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">⚽ Mundial 2026 · Oferta activa</div>
+    <h1>
+      Para alentar a la selección,<br>
+      <span class="accent">primero hay que descansar</span><br>
+      como un campeón.
+      <span class="sub">Dormir bien no es un lujo. Es la base para que puedas disfrutar cada partido sin cansancio.</span>
+    </h1>
+    <p class="hero-desc">Precio honesto, cuotas sin interés y entrega antes del próximo partido. Sin promesas de lujo, solo el descanso que necesitás.</p>
+    <div class="hero-cta">
+      <a href="#productos" class="btn-primary">Ver colchones con descuento</a>
+      <a href="#registro" class="btn-outline">Registrarme gratis</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hcard"><div class="hcard-icon" style="background:#eff6ff;">🚚</div><div>Entrega en 24–48 hs<small>Antes del próximo partido</small></div></div>
+    <div class="hcard"><div class="hcard-icon" style="background:#eff6ff;">💳</div><div>12 cuotas sin interés<small>Todos los bancos</small></div></div>
+    <div class="hcard"><div class="hcard-icon" style="background:#f0fdf4;">⭐</div><div>4.9 / 5 en MercadoLibre<small>+2.400 reseñas verificadas</small></div></div>
+    <div class="hcard"><div class="hcard-icon" style="background:#eff6ff;">🏷️</div><div>Precio honesto garantizado<small>Sin inflación de base</small></div></div>
+  </div>
 </section>
 
-<!-- SECCIÓN DE CAPTACIÓN: Formulario Match Sale -->
-<section id="registro" class="match-sale-section">
-  <h2>¡Acceso Anticipado a las Ofertas Relámpago!</h2>
-  <p>Registrate para recibir alertas exclusivas cada vez que juegue la selección y accedé a precios de fábrica antes que nadie.</p>
-  
-  <!-- Formulario dinámico -->
-  <form id="form-mundial" novalidate>
-    <div class="form-group">
-      <label for="nombre">Nombre completo:</label>
-      <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
-    </div>
-    
-    <div class="form-group">
-      <label for="email">Correo Electrónico:</label>
-      <input type="email" id="email" name="email" placeholder="Ej: juan@mail.com" required>
-    </div>
-    
-    <div class="form-group">
-      <label for="whatsapp">WhatsApp (Celular):</label>
-      <input type="tel" id="whatsapp" name="whatsapp" placeholder="Ej: 1123456789" required>
-    </div>
-    
-    <button type="submit" class="btn-submit">Registrarme ya</button>
-  </form>
-  
-  <!-- Feedback visual tras el envío -->
-  <div id="form-feedback" class="hidden" role="alert" aria-live="polite"></div>
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <div class="feat"><div class="feat-icon">🚚</div><div><div class="feat-title">Envío gratis</div><div class="feat-desc">A todo AMBA sin cargo</div></div></div>
+  <div class="feat"><div class="feat-icon">💳</div><div><div class="feat-title">12 cuotas sin interés</div><div class="feat-desc">Todos los bancos</div></div></div>
+  <div class="feat"><div class="feat-icon">🔄</div><div><div class="feat-title">30 días devolución</div><div class="feat-desc">Sin preguntas</div></div></div>
+  <div class="feat"><div class="feat-icon">🛡️</div><div><div class="feat-title">Garantía 5 años</div><div class="feat-desc">Respaldada por escrito</div></div></div>
+</div>
+
+<!-- MATCH SALE -->
+<section class="match-sale">
+  <p class="ms-eyebrow">Oferta relámpago · Días de partido</p>
+  <div class="ms-badge">Activa ahora</div>
+  <h2>La Match Sale expira cuando termina el partido</h2>
+  <p>Cada día que juega la Selección activamos descuentos especiales por tiempo limitado. No los pierdas.</p>
+  <div class="ms-timer">
+    <div class="ms-unit"><div class="ms-val" id="ms-h">00</div><div class="ms-lbl">Horas</div></div>
+    <div class="ms-unit"><div class="ms-val" id="ms-m">00</div><div class="ms-lbl">Minutos</div></div>
+    <div class="ms-unit"><div class="ms-val" id="ms-s">00</div><div class="ms-lbl">Segundos</div></div>
+  </div>
+  <a href="#registro" class="btn-white">Activar mi descuento ⚽</a>
 </section>
 
-<footer class="footer">
-  &copy; 2026 SueñoSimple. Todos los derechos reservados. &mdash;
-  <a href="#">Política de privacidad</a>
+<!-- PRODUCTS -->
+<section class="section" id="productos">
+  <p class="section-label">Línea Económica Pro · Mundial 2026</p>
+  <h2 class="section-title">Elegí tu descanso de campeón</h2>
+  <p class="section-sub">Precios con descuento mundialista ya aplicados. Cuotas sin interés incluidas.</p>
+  <div class="products-grid">
+
+    <div class="product-card">
+      <div class="product-img-area" style="background:#eff6ff;">
+        <div class="badge-top">Más vendido</div><div class="badge-pct">−30%</div>
+        <div class="mattress-css"><div class="mc-top" style="background:#2563eb;color:#fff;">Económica Pro</div><div class="mc-base" style="background:#1d4ed8;"></div></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Económica Pro</div>
+        <div class="product-desc">Espuma alta densidad 30 kg/m³. Tela jacquard antiácaros. El equilibrio ideal entre precio y descanso real.</div>
+        <div class="price-row"><span class="price-now">$54.990</span><span class="price-was">$78.560</span></div>
+        <div class="cuotas">12 × $4.582 sin interés</div>
+        <button class="btn-add" onclick="showToast('Un asesor te contactará por WhatsApp. 🎯')">Quiero este colchón</button>
+      </div>
+    </div>
+
+    <div class="product-card featured">
+      <div class="product-img-area" style="background:#f0f9ff;">
+        <div class="badge-top">Recomendado</div><div class="badge-pct">−35%</div>
+        <div class="mattress-css"><div class="mc-top" style="background:#0369a1;color:#fff;">Confort Plus</div><div class="mc-base" style="background:#0284c7;"></div></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Confort Plus</div>
+        <div class="product-desc">Memory foam viscoelástico que adapta la temperatura. Para quienes no negocian con su descanso.</div>
+        <div class="price-row"><span class="price-now">$74.990</span><span class="price-was">$115.370</span></div>
+        <div class="cuotas">12 × $6.249 sin interés</div>
+        <button class="btn-add" onclick="showToast('Un asesor te contactará por WhatsApp. 🎯')">Quiero este colchón</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-area" style="background:#f0fdf4;">
+        <div class="badge-pct">−40%</div>
+        <div class="mattress-css"><div class="mc-top" style="background:#15803d;color:#fff;">Sommier Completo</div><div class="mc-base" style="background:#166534;"></div></div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">Sommier Completo</div>
+        <div class="product-desc">Colchón + base sommier. 400 resortes independientes. El set completo para descansar como profesional.</div>
+        <div class="price-row"><span class="price-now">$99.990</span><span class="price-was">$166.650</span></div>
+        <div class="cuotas">12 × $8.332 sin interés</div>
+        <button class="btn-add" onclick="showToast('Un asesor te contactará por WhatsApp. 🎯')">Quiero este colchón</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi-section" id="resenas">
+  <div style="max-width:1100px;margin:0 auto;">
+    <p class="section-label">Reseñas de clientes reales</p>
+    <h2 class="section-title">+2.400 familias ya duermen mejor</h2>
+    <p class="section-sub">Compradores verificados. Sin filtros ni edición.</p>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-source">Compra verificada · MercadoLibre</div>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Tres meses con el Económica Pro. Antes me levantaba con dolor de espalda. Ahora me levanto listo para ver el partido. Increíble relación precio-calidad."</p>
+        <div class="testi-author"><div class="testi-av">RP</div><div><div class="testi-name">Rodrigo P.</div><div class="testi-loc">Quilmes, GBA Sur</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-source">Compra verificada · Tienda oficial</div>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Pedí el miércoles, llegó el viernes. Exactamente lo que prometían, sin letra chica. Precio honesto de verdad. Lo recomendé a toda la familia."</p>
+        <div class="testi-author"><div class="testi-av">ML</div><div><div class="testi-name">Mariana L.</div><div class="testi-loc">Palermo, CABA</div></div></div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-source">Compra verificada · Google Reviews</div>
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Compré el Sommier en 12 cuotas. No esperaba esa calidad a ese precio. Mis hijos duermen mejor y el Mundial lo vemos todos descansados."</p>
+        <div class="testi-author"><div class="testi-av">CG</div><div><div class="testi-name">Claudia G.</div><div class="testi-loc">Morón, GBA Oeste</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-item"><div class="trust-icon">🏷️</div><div><div class="trust-title">Precio honesto</div><div class="trust-desc">Sin inflación de precio base. El descuento es real.</div></div></div>
+  <div class="trust-item"><div class="trust-icon">🔄</div><div><div class="trust-title">Política de cambios</div><div class="trust-desc">30 días sin preguntas ni formularios.</div></div></div>
+  <div class="trust-item"><div class="trust-icon">🛡️</div><div><div class="trust-title">Garantía 5 años</div><div class="trust-desc">Defecto cubierto por escrito.</div></div></div>
+  <div class="trust-item"><div class="trust-icon">🔒</div><div><div class="trust-title">Compra segura</div><div class="trust-desc">Datos encriptados. Pago protegido.</div></div></div>
+</div>
+
+<!-- LOGISTICS -->
+<section class="logistics-section">
+  <p class="section-label">Logística mundialista</p>
+  <h2 class="section-title">Tu colchón llega antes del próximo partido</h2>
+  <p class="section-sub">Entrega rápida en toda la zona AMBA.</p>
+  <div class="logistics-grid">
+    <div class="log-card"><span class="log-icon">📦</span><div class="log-title">Roll pack</div><div class="log-desc">El colchón viaja comprimido en rollo. Fácil de maniobrar solo. Se expande en 2–4 horas.</div><span class="log-tag">Fácil de instalar</span></div>
+    <div class="log-card"><span class="log-icon">🚚</span><div class="log-title">24–48 hs a tu puerta</div><div class="log-desc">CABA en 24 hs. GBA primer cordón en 48 hs. Coordinás horario por WhatsApp.</div><span class="log-tag">Tracking en vivo</span></div>
+    <div class="log-card"><span class="log-icon">📞</span><div class="log-title">Soporte humano</div><div class="log-desc">Un asesor real te acompaña desde la compra hasta la entrega. Lun–Sáb 9 a 20 hs.</div><span class="log-tag">Respuesta en minutos</span></div>
+  </div>
+  <div class="zone-row">
+    <span class="zone-item"><span class="zone-dot" style="background:#16a34a;"></span><strong>24 hs</strong>&nbsp;— CABA</span>
+    <span class="zone-item"><span class="zone-dot" style="background:#2563eb;"></span><strong>48 hs</strong>&nbsp;— GBA 1° cordón</span>
+    <span class="zone-item"><span class="zone-dot" style="background:#f59e0b;"></span><strong>72 hs</strong>&nbsp;— GBA 2° cordón</span>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-outer" id="registro">
+  <div class="form-inner">
+    <p class="section-label">Acceso exclusivo</p>
+    <h2 class="section-title">Registrate y activá tu descuento mundialista</h2>
+    <p class="section-sub" style="margin:0 auto;">Un asesor te contacta por WhatsApp con tu oferta personalizada. Sin spam.</p>
+    <div class="form-card">
+      <form id="form-mundial" novalidate>
+        <div class="form-row">
+          <div class="form-field"><label for="nombre">Nombre</label><input type="text" id="nombre" name="nombre" placeholder="Juan Pérez" required></div>
+          <div class="form-field"><label for="whatsapp">WhatsApp</label><input type="tel" id="whatsapp" name="whatsapp" placeholder="11 2345-6789" required></div>
+        </div>
+        <div class="form-field"><label for="email">Email</label><input type="email" id="email" name="email" placeholder="juan@mail.com" required></div>
+        <button type="submit" class="btn-submit">⚽ &nbsp;Quiero mi descuento mundial</button>
+      </form>
+      <div id="form-feedback" class="hidden" role="alert" aria-live="polite"></div>
+      <div class="form-trust-row">
+        <span class="form-trust-item">🔒 Datos protegidos</span>
+        <span class="form-trust-item">📵 Sin spam</span>
+        <span class="form-trust-item">✓ Respuesta en minutos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="footer-logo">
+      <p class="footer-desc">Colchones de calidad real a precios accesibles. Dormir bien no debería ser un lujo, especialmente en época de Mundial.</p>
+      <div class="footer-seals">
+        <span class="footer-seal">🏷️ Precio honesto</span>
+        <span class="footer-seal">🛡️ Garantía 5 años</span>
+        <span class="footer-seal">🔄 Cambio fácil</span>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Productos</h4><ul><li><a href="#">Económica Pro</a></li><li><a href="#">Confort Plus</a></li><li><a href="#">Sommier Completo</a></li><li><a href="#">Almohadas</a></li></ul></div>
+    <div class="footer-col"><h4>Ayuda</h4><ul><li><a href="#">Cómo comprar</a></li><li><a href="#">Zonas de envío</a></li><li><a href="#">Cambios y devoluciones</a></li><li><a href="#">Garantía</a></li></ul></div>
+    <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Política de privacidad</a></li><li><a href="#">Términos y condiciones</a></li><li><a href="#">Política de cambios</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 SueñoSimple. Todos los derechos reservados.</div>
+    <div class="footer-flag">Vamos Argentina 🇦🇷</div>
+  </div>
 </footer>
+
+<a href="https://wa.me/5491100000000" class="wa-float" id="wa-float" target="_blank" rel="noopener noreferrer">
+  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
+  Hablá con un asesor
+</a>
+
+<div class="toast" id="toast"><span>✓</span><span id="toast-msg">Acción completada</span></div>
+
 <script>
-// 1. Captura del formulario y feedback 
-  const formulario = document.getElementById('form-mundial');
-  // Simulamos el ID de la campaña del Mundial (ej: ID 6)
-  const LANDING_ID = 6; 
-  const API_BASE_URL = 'http://localhost:3000';
+  function updateTimers() {
+    const now = new Date(), target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1), diff = target - now;
+    const h = String(Math.floor(diff/3600000)).padStart(2,'0');
+    const m = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    const s = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+    ['t-h','ms-h'].forEach(id => document.getElementById(id).textContent = h);
+    ['t-m','ms-m'].forEach(id => document.getElementById(id).textContent = m);
+    ['t-s','ms-s'].forEach(id => document.getElementById(id).textContent = s);
+  }
+  updateTimers(); setInterval(updateTimers, 1000);
 
-  // Agregamos ASYNC acá para poder usar AWAIT adentro
-  formulario.addEventListener('submit', async function(event) {
-    event.preventDefault();
-    limpiarErrores();
-
-    const nombre = document.getElementById('nombre').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const whatsapp = document.getElementById('whatsapp').value.trim();
-
-    let tieneErrores = false;
-
-    if (nombre === '') {
-      mostrarError('nombre', 'Por favor, ingresá tu nombre completo.');
-      tieneErrores = true;
-    }
-    if (email === '' || !email.includes('@')) {
-      mostrarError('email', 'Ingresá un correo electrónico válido.');
-      tieneErrores = true;
-    }
-    
-    // WhatsApp obligatorio ya que para esta campaña lo definimos así en el Front
-    if (whatsapp === '') {
-      mostrarError('whatsapp', 'El número de WhatsApp es obligatorio.');
-      tieneErrores = true;
-    }
-
-    if (tieneErrores) return;
-
-    // --- INICIO DEL MOTOR ASÍNCRONO DEL CRM ---
-    
-    // 1. Estado de carga en el botón
-    const btnSubmit = formulario.querySelector('.btn-submit') || formulario.querySelector('button[type="submit"]');
-    const textoOriginalBoton = btnSubmit.innerText;
-    btnSubmit.innerText = 'Reservando promo... ⏳';
-    btnSubmit.disabled = true;
-
-    // 2. Armamos el contrato exacto (Mapeamos whatsapp -> phone)
-    const payload = {
-      name: nombre,
-      email: email,
-      phone: whatsapp,
-      message: "Lead registrado desde Landing Mundial 2026 - Línea Económica Pro"
-    };
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/landings/${LANDING_ID}/leads`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (response.ok) {
-        // ÉXITO COMPLETO: Mensaje profesional para el usuario final
-        mostrarFeedbackUsuario(
-          'success', 
-          '¡Golazo! Tu registro fue exitoso. Un asesor de SueñoSimple se contactará con vos por WhatsApp para activar tus descuentos mundialistas.'
-        );
-        formulario.reset();
-      } else {
-        throw new Error('Error en el servidor CRM');
+  const waBtn = document.getElementById('wa-float');
+  // IntersectionObserver: muestra el botón flotante cuando el hero sale del viewport.
+  // Evita disparar lógica en cada evento scroll.
+  const heroSentinel = document.querySelector('.hero');
+  if (heroSentinel && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => waBtn.classList.toggle('visible', !entry.isIntersecting),
+      { threshold: 0 }
+    ).observe(heroSentinel);
+  } else {
+    // Fallback con throttle para browsers sin IntersectionObserver
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          waBtn.classList.toggle('visible', window.scrollY > 450);
+          ticking = false;
+        });
+        ticking = true;
       }
+    }, { passive: true });
+  }
 
-    } catch (error) {
-      console.error('Error de integración:', error);
-      // ERROR DE CONEXIÓN
-      mostrarFeedbackUsuario(
-        'error', 
-        '¡Ups! Tuvimos un inconveniente temporal para procesar tu solicitud. Por favor, intentá nuevamente en unos minutos.'
-      );
-    } finally {
-      // Devolvemos el control al botón pase lo que pase
-      btnSubmit.innerText = textoOriginalBoton;
-      btnSubmit.disabled = false;
-    }
-    // --- FIN DEL MOTOR ASÍNCRONO ---
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  const LANDING_ID = 6, API_BASE = 'http://localhost:3000';
+  const form = document.getElementById('form-mundial'), feedback = document.getElementById('form-feedback');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault(); clearErrors();
+    const nombre = document.getElementById('nombre').value.trim();
+    const email  = document.getElementById('email').value.trim();
+    const wa     = document.getElementById('whatsapp').value.trim();
+    let err = false;
+    if (!nombre)              { fieldError('nombre',   'Ingresá tu nombre.');         err = true; }
+    if (!email||!email.includes('@')) { fieldError('email', 'Email inválido.');        err = true; }
+    if (!wa)                  { fieldError('whatsapp', 'WhatsApp obligatorio.');       err = true; }
+    if (err) return;
+    const btn = form.querySelector('.btn-submit');
+    btn.textContent = 'Enviando... ⏳'; btn.disabled = true;
+    try {
+      const res = await fetch(`${API_BASE}/api/landings/${LANDING_ID}/leads`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ name:nombre, email, phone:wa, message:'Lead – Landing Mundial 2026' })
+      });
+      if (res.ok) { feedback.className='exito'; feedback.textContent='¡Listo! Un asesor te contactará por WhatsApp con tu descuento. 🇦🇷'; form.reset(); }
+      else throw new Error();
+    } catch { feedback.className='error'; feedback.textContent='Hubo un problema. Intentá de nuevo o escribinos por WhatsApp.'; }
+    finally { btn.textContent='⚽  Quiero mi descuento mundial'; btn.disabled=false; }
   });
 
-  // Funciones de ayuda visual
-  function mostrarError(idInput, mensaje) {
-    const input = document.getElementById(idInput);
-    if (!input) return;
-    input.classList.add('input-error');
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.innerText = mensaje;
-    input.parentElement.appendChild(errorDiv);
+  function fieldError(id, msg) {
+    const el = document.getElementById(id); if(!el) return;
+    el.classList.add('input-error');
+    const d = document.createElement('div'); d.className='error-msg'; d.textContent=msg;
+    el.parentElement.appendChild(d);
   }
-
-  function limpiarErrores() {
-    const inputsConError = document.querySelectorAll('.input-error');
-    inputsConError.forEach(input => input.classList.remove('input-error'));
-    const mensajes = document.querySelectorAll('.error-message, .feedback-global');
-    mensajes.forEach(msg => msg.remove());
-  }
-
-  // Inyecta un bloque de feedback UX arriba o abajo del form
-  function mostrarFeedbackUsuario(tipo, mensaje) {
-    const feedbackDiv = document.createElement('div');
-    feedbackDiv.className = `feedback-global feedback-${tipo}`; 
-    feedbackDiv.style.padding = '16px';
-    feedbackDiv.style.marginTop = '15px';
-    feedbackDiv.style.borderRadius = '4px';
-    feedbackDiv.style.fontWeight = 'bold';
-    feedbackDiv.style.textAlign = 'center';
-    
-    if (tipo === 'success') {
-      feedbackDiv.style.background = '#dcfce7'; // Verde clarito
-      feedbackDiv.style.color = '#15803d';
-    } else {
-      feedbackDiv.style.background = '#fef2f2'; // Rojo clarito
-      feedbackDiv.style.color = '#b91c1c';
-    }
-    
-    feedbackDiv.innerText = mensaje;
-    formulario.appendChild(feedbackDiv);
+  function clearErrors() {
+    feedback.className='hidden'; feedback.textContent='';
+    document.querySelectorAll('.input-error').forEach(el=>el.classList.remove('input-error'));
+    document.querySelectorAll('.error-msg').forEach(el=>el.remove());
   }
 </script>
-
 </body>
 </html>

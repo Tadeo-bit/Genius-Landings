@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 de Julio - SueñoSimple 50% OFF</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F5F0E8;
+    --navy: #1A1F3A;
+    --gold: #C9A84C;
+    --gold-light: #E8C96A;
+    --red: #C0392B;
+    --red-light: #E74C3C;
+    --white: #FFFFFF;
+    --gray-light: #F8F6F2;
+    --gray-mid: #9B9B8F;
+    --text-dark: #1A1F3A;
+    --text-light: #6B6B5F;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  .back-bar {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 10px 32px;
+    font-size: 0.82rem;
+  }
+  .back-bar a { color: #2563eb; text-decoration: none; }
+  .back-bar a:hover { text-decoration: underline; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── COUNTDOWN STRIP ─── */
+  .countdown-strip {
+    background: var(--navy);
+    color: var(--gold-light);
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .countdown-strip span { color: var(--white); font-weight: 700; font-size: 15px; }
+  #countdown-timer {
+    display: inline-flex;
+    gap: 8px;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold-light);
+  }
+  .timer-block { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .timer-block small { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 400; color: var(--gray-mid); letter-spacing: 0.1em; margin-top: 2px; }
+  .timer-sep { align-self: flex-start; margin-top: 2px; color: var(--gold); }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid rgba(26,31,58,0.08);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: var(--navy); letter-spacing: -0.02em; }
+  .logo span { color: var(--gold); }
+  .logo-img { height: 36px; width: auto; object-fit: contain; }
+  nav a { text-decoration: none; color: var(--text-light); font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  nav a:hover { color: var(--navy); }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-cta {
+    background: var(--navy);
+    color: var(--white) !important;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 13px !important;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.1s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--navy) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 88vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    background: var(--navy);
+    padding: 80px 60px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-bottom: 32px;
+    width: fit-content;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge { 0%,100%{ box-shadow: 0 0 0 0 rgba(201,168,76,0.4); } 50%{ box-shadow: 0 0 0 12px rgba(201,168,76,0); } }
+  .hero-badge::before { content: ''; width: 8px; height: 8px; background: var(--red); border-radius: 50%; animation: blink 1s step-start infinite; }
+  @keyframes blink { 0%,100%{ opacity: 1; } 50%{ opacity: 0; } }
+
+  .hero-eyebrow { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 16px; font-weight: 400; }
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 5vw, 76px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.0;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .hero-title .accent { color: var(--gold-light); display: block; }
+  .hero-discount {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(80px, 10vw, 130px);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+  }
+  .hero-discount-label { font-size: 14px; color: var(--gray-mid); margin-bottom: 32px; font-weight: 300; }
+  .hero-desc { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 40px; max-width: 400px; font-weight: 300; }
+  .hero-cta-group { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 16px 36px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 15px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+    display: inline-block;
+    letter-spacing: 0.02em;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 16px 36px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 15px;
+    border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(201,168,76,0.08); }
+
+  .hero-right {
+    background: var(--cream);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .hero-illustration {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .mattress-visual {
+    width: 380px;
+    position: relative;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{ transform: translateY(0px); } 50%{ transform: translateY(-16px); } }
+
+  .mattress-base {
+    width: 100%;
+    height: 60px;
+    background: var(--navy);
+    border-radius: 12px 12px 8px 8px;
+    position: relative;
+  }
+  .mattress-body {
+    width: 100%;
+    height: 90px;
+    background: var(--white);
+    border-radius: 14px 14px 4px 4px;
+    border: 2px solid rgba(26,31,58,0.1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mattress-stripes {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 40px,
+      rgba(201,168,76,0.15) 40px,
+      rgba(201,168,76,0.15) 42px
+    );
+  }
+  .mattress-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    z-index: 1;
+    letter-spacing: -0.02em;
+  }
+  .mattress-pillow {
+    position: absolute;
+    top: -28px;
+    width: 110px;
+    height: 55px;
+    background: var(--white);
+    border-radius: 50%;
+    border: 2px solid rgba(26,31,58,0.1);
+  }
+  .mattress-pillow:first-child { left: 30px; }
+  .mattress-pillow:last-child { right: 30px; }
+
+  .tag-bubble {
+    position: absolute;
+    background: var(--white);
+    border: 1px solid rgba(26,31,58,0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(26,31,58,0.08);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+  }
+  .tag-bubble .icon { font-size: 18px; }
+  .tag-bubble:nth-child(1) { top: 15%; right: 10%; animation-delay: 0.8s; }
+  .tag-bubble:nth-child(2) { bottom: 25%; left: 5%; animation-delay: 1.1s; }
+  .tag-bubble:nth-child(3) { top: 55%; right: 8%; animation-delay: 1.4s; }
+  @keyframes pop-in { 0%{ opacity: 0; transform: scale(0.7) translateY(10px); } 100%{ opacity: 1; transform: scale(1) translateY(0); } }
+
+  /* ─── WAVE DIVIDER ─── */
+  .wave { line-height: 0; }
+  .wave svg { display: block; }
+
+  /* ─── PRODUCTS ─── */
+  .section { padding: 80px 80px; }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 900; color: var(--navy); letter-spacing: -0.02em; line-height: 1.1; }
+  .section-sub { margin-top: 16px; color: var(--text-light); font-size: 16px; font-weight: 300; max-width: 500px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .product-card {
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(26,31,58,0.06);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+  .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(26,31,58,0.12); }
+  .product-card.featured { border: 2px solid var(--gold); }
+  .featured-flag {
+    position: absolute;
+    top: 16px; left: 16px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 4px;
+  }
+  .product-img {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .product-img-bg { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+  .product-mattress {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .pm-top {
+    width: 200px;
+    height: 50px;
+    border-radius: 10px 10px 4px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .pm-base { width: 200px; height: 28px; border-radius: 0 0 8px 8px; }
+  .product-info { padding: 24px; }
+  .product-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .product-desc { font-size: 13px; color: var(--text-light); line-height: 1.6; margin-bottom: 16px; font-weight: 300; }
+  .product-price {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .price-now { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: var(--navy); }
+  .price-before { font-size: 16px; color: var(--gray-mid); text-decoration: line-through; }
+  .price-badge { background: var(--red); color: var(--white); font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.05em; }
+  .btn-add {
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.02em;
+  }
+  .btn-add:hover { background: var(--gold); color: var(--navy); }
+  .btn-add:active { transform: scale(0.98); }
+
+  /* ─── FEATURES STRIP ─── */
+  .features-strip {
+    background: var(--navy);
+    padding: 48px 80px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .feature-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+  .feature-icon { width: 48px; height: 48px; border-radius: 50%; background: rgba(201,168,76,0.15); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .feature-title { font-size: 14px; font-weight: 600; color: var(--white); }
+  .feature-desc { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.6; font-weight: 300; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testimonials { background: var(--gray-light); padding: 80px; }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+  .testi-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 28px;
+    border: 1px solid rgba(26,31,58,0.06);
+    position: relative;
+    transition: transform 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-4px); }
+  .testi-quote { font-size: 40px; font-family: 'Playfair Display', serif; color: var(--gold); line-height: 1; margin-bottom: 12px; }
+  .testi-text { font-size: 14px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; font-weight: 300; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+  .testi-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+  .testi-loc { font-size: 12px; color: var(--gray-mid); }
+  .stars { color: var(--gold); font-size: 13px; margin-bottom: 12px; letter-spacing: 2px; }
+
+  /* ─── CALCULATOR ─── */
+  .calculator-section { background: var(--white); padding: 80px; }
+  .calculator-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--navy);
+    border-radius: 24px;
+    padding: 48px;
+    color: var(--white);
+  }
+  .calc-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .calc-sub { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 32px; }
+  .calc-row { margin-bottom: 24px; }
+  .calc-label { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.7); margin-bottom: 10px; letter-spacing: 0.05em; text-transform: uppercase; display: flex; justify-content: space-between; }
+  .calc-label span { color: var(--gold-light); font-size: 16px; text-transform: none; letter-spacing: 0; font-weight: 700; }
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 3px solid var(--navy);
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+  .calc-result {
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 8px;
+  }
+  .calc-savings { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--gold-light); }
+  .calc-savings-label { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+  /* ─── INCOMPLETE SECTION: FORM ─── */
+  .incomplete-section {
+    padding: 80px;
+    position: relative;
+  }
+  .incomplete-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(201,168,76,0.04),
+      rgba(201,168,76,0.04) 10px,
+      transparent 10px,
+      transparent 20px
+    );
+    pointer-events: none;
+    z-index: 1;
+    border: 3px dashed rgba(201,168,76,0.35);
+    border-radius: 16px;
+  }
+  .dev-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+  }
+  .dev-badge::before { content: ''; width: 8px; height: 8px; background: var(--red); border-radius: 50%; }
+
+  /* FORM SECTION */
+  .form-section { background: var(--cream); }
+  .form-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .form-field { margin-bottom: 20px; }
+  .form-field label { display: block; font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 8px; letter-spacing: 0.04em; }
+  .form-field input, .form-field select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid rgba(26,31,58,0.12);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  /* TODO: campo de dirección de entrega pendiente */
+  .form-todo {
+    height: 52px;
+    background: rgba(201,168,76,0.08);
+    border: 2px dashed rgba(201,168,76,0.4);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 500;
+    gap: 8px;
+  }
+
+  /* MAP SECTION */
+  .map-section { background: var(--white); }
+  .map-placeholder {
+    width: 100%;
+    height: 380px;
+    background: var(--gray-light);
+    border-radius: 16px;
+    border: 2px dashed rgba(201,168,76,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-light);
+    position: relative;
+    z-index: 2;
+    font-size: 15px;
+  }
+  .map-icon { font-size: 48px; }
+  .map-label { font-size: 13px; color: var(--gray-mid); }
+
+  /* REVIEWS SECTION */
+  .reviews-section { background: var(--cream); }
+  .reviews-todo {
+    border: 2px dashed rgba(201,168,76,0.4);
+    border-radius: 16px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+  .star-row { display: flex; gap: 6px; }
+  .star-empty { font-size: 32px; color: rgba(201,168,76,0.3); }
+  .reviews-label { font-size: 15px; color: var(--text-light); max-width: 360px; line-height: 1.6; }
+
+  /* ─── STICKY CTA ─── */
+  .sticky-cta {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(201,168,76,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateY(80px);
+    opacity: 0;
+  }
+  .sticky-cta.visible { transform: translateY(0); opacity: 1; }
+  .sticky-cta:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 40px rgba(201,168,76,0.5); }
+  .sticky-cta .cart-count {
+    background: var(--navy);
+    color: var(--gold-light);
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ─── CART DRAWER ─── */
+  .cart-drawer {
+    position: fixed;
+    top: 0; right: -400px; bottom: 0;
+    width: 380px;
+    background: var(--white);
+    border-left: 1px solid rgba(26,31,58,0.08);
+    z-index: 300;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -4px 0 30px rgba(26,31,58,0.1);
+  }
+  .cart-drawer.open { right: 0; }
+  .cart-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(26,31,58,0.4);
+    z-index: 299;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+  .cart-header {
+    padding: 24px;
+    border-bottom: 1px solid rgba(26,31,58,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cart-title-h { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--navy); }
+  .cart-close { background: none; border: none; cursor: pointer; font-size: 22px; color: var(--text-light); padding: 4px; border-radius: 4px; transition: color 0.2s; }
+  .cart-close:hover { color: var(--navy); }
+  .cart-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .cart-empty { text-align: center; padding: 60px 0; color: var(--gray-mid); font-size: 14px; }
+  .cart-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(26,31,58,0.06);
+    align-items: center;
+  }
+  .cart-item-img { width: 60px; height: 45px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .cart-item-price { font-size: 13px; color: var(--text-light); }
+  .cart-item-remove { background: none; border: none; color: var(--gray-mid); cursor: pointer; font-size: 18px; padding: 4px; transition: color 0.2s; }
+  .cart-item-remove:hover { color: var(--red); }
+  .cart-footer { padding: 20px 24px; border-top: 1px solid rgba(26,31,58,0.06); }
+  .cart-total { display: flex; justify-content: space-between; margin-bottom: 16px; font-weight: 600; font-size: 15px; color: var(--navy); }
+  .cart-savings-note { font-size: 12px; color: var(--gold); font-weight: 500; margin-bottom: 16px; text-align: center; }
+  .btn-checkout {
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .btn-checkout:hover { background: var(--gold); color: var(--navy); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    color: var(--white);
+    padding: 60px 80px 32px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+  .footer-brand .logo { margin-bottom: 16px; display: block; }
+  .footer-desc { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.7; font-weight: 300; }
+  .footer-col h4 { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 16px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { text-decoration: none; font-size: 13px; color: rgba(255,255,255,0.5); transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--gold-light); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+  .footer-flag { font-size: 12px; color: var(--gold); font-weight: 500; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    right: 24px;
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.3s, opacity 0.3s;
+    box-shadow: 0 4px 20px rgba(26,31,58,0.2);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast-icon { font-size: 18px; }
+
+  /* ─── ANIMATIONS ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .products-grid { grid-template-columns: 1fr; }
+    .features-strip { grid-template-columns: repeat(2, 1fr); }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .section, .features-strip, .testimonials, .calculator-section, .incomplete-section, footer { padding: 48px 24px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="back-bar">
+  <a href="index.html">← Volver a SueñoSimple</a>
+</div>
+
+<!-- COUNTDOWN STRIP -->
+<div class="countdown-strip">
+  <span>OFERTA 9 DE JULIO</span>
+  &nbsp;· La promoción termina en&nbsp;
+  <div id="countdown-timer">
+    <div class="timer-block"><span id="t-h">00</span><small>HRS</small></div>
+    <div class="timer-sep">:</div>
+    <div class="timer-block"><span id="t-m">00</span><small>MIN</small></div>
+    <div class="timer-sep">:</div>
+    <div class="timer-block"><span id="t-s">00</span><small>SEG</small></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo"><img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="logo-img"></div>
+  <div class="nav-links">
+    <a href="#productos">Colchones</a>
+    <a href="#testimonios">Reseñas</a>
+    <a href="#calculadora">Calculadora</a>
+    <a href="#contacto" class="nav-cta">Comprar ahora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-badge">Oferta activa · 9 de Julio</div>
+    <p class="hero-eyebrow">Fiestas Patrias 2025</p>
+    <h1 class="hero-title">
+      Dormir bien<br>
+      <span class="accent">no es un lujo.</span>
+    </h1>
+    <div class="hero-discount">50%</div>
+    <p class="hero-discount-label">de descuento en toda la colección</p>
+    <p class="hero-desc">Porque las Fiestas Patrias merecen el mejor descanso. Colchones de calidad real, a precios que tienen sentido. Entrega rápida en AMBA.</p>
+    <div class="hero-cta-group">
+      <a href="#productos" class="btn-primary">Ver colchones</a>
+      <a href="#calculadora" class="btn-secondary">Calcular mi ahorro</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-illustration">
+      <div class="tag-bubble">
+        <span class="icon">🚀</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1A1F3A;">Entrega en 48h</div>
+          <div style="font-size:11px;color:#9B9B8F;">Zona AMBA</div>
+        </div>
+      </div>
+      <div class="tag-bubble">
+        <span class="icon">⭐</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1A1F3A;">4.9 / 5</div>
+          <div style="font-size:11px;color:#9B9B8F;">+2.400 reseñas</div>
+        </div>
+      </div>
+      <div class="tag-bubble">
+        <span class="icon">🔒</span>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:#1A1F3A;">Garantía 5 años</div>
+          <div style="font-size:11px;color:#9B9B8F;">Sin letra chica</div>
+        </div>
+      </div>
+
+      <div class="mattress-visual">
+        <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+          <div class="mattress-pillow"></div>
+          <div class="mattress-pillow" style="position:absolute;top:-28px;right:30px;left:auto;"></div>
+          <div class="mattress-body">
+            <div class="mattress-stripes"></div>
+            <div class="mattress-label">Económica Pro</div>
+          </div>
+          <div class="mattress-base"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <div class="feature-item fade-up">
+    <div class="feature-icon">🚚</div>
+    <div class="feature-title">Envío gratis</div>
+    <div class="feature-desc">A todo AMBA sin cargo adicional en toda la promoción</div>
+  </div>
+  <div class="feature-item fade-up" style="transition-delay:0.1s;">
+    <div class="feature-icon">💳</div>
+    <div class="feature-title">18 cuotas sin interés</div>
+    <div class="feature-desc">Con tarjetas seleccionadas de todos los bancos</div>
+  </div>
+  <div class="feature-item fade-up" style="transition-delay:0.2s;">
+    <div class="feature-icon">🔄</div>
+    <div class="feature-title">Devolución fácil</div>
+    <div class="feature-desc">30 días de garantía de satisfacción sin preguntas</div>
+  </div>
+  <div class="feature-item fade-up" style="transition-delay:0.3s;">
+    <div class="feature-icon">📞</div>
+    <div class="feature-title">Soporte real</div>
+    <div class="feature-desc">Asesoramiento humano por WhatsApp de lunes a sábado</div>
+  </div>
+</div>
+
+<!-- WAVE -->
+<div class="wave">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60" preserveAspectRatio="none" style="width:100%;height:60px;background:#1A1F3A;">
+    <path d="M0,60 L0,20 Q360,60 720,20 Q1080,-20 1440,20 L1440,60 Z" fill="#F5F0E8"/>
+  </svg>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section" id="productos">
+  <div class="section-header">
+    <p class="section-eyebrow">Colección 9 de Julio</p>
+    <h2 class="section-title">Elegí tu descanso</h2>
+    <p class="section-sub">Todos los colchones con 50% de descuento por tiempo limitado. Precios con descuento ya aplicado.</p>
+  </div>
+  <div class="products-grid" id="products-container">
+
+    <div class="product-card fade-up" data-id="1" data-name="Económica Pro" data-price="45990" data-before="91980">
+      <div class="product-img" style="background:#EEF2F8;">
+        <div class="product-img-bg" style="background:linear-gradient(135deg,#EEF2F8 0%,#E2E9F4 100%);"></div>
+        <div class="product-mattress">
+          <div class="pm-top" style="background:#1A1F3A;color:#C9A84C;">Económica Pro</div>
+          <div class="pm-base" style="background:#0F1225;"></div>
+        </div>
+      </div>
+      <div class="featured-flag">Más vendido</div>
+      <div class="product-info">
+        <div class="product-name">Económica Pro</div>
+        <div class="product-desc">Espuma de alta densidad 30kg/m³. Ideal para uso diario. Tela jacquard antiácaros incluida.</div>
+        <div class="product-price">
+          <span class="price-now">$45.990</span>
+          <span class="price-before">$91.980</span>
+          <span class="price-badge">-50%</span>
+        </div>
+        <button class="btn-add" onclick="addToCart(1,'Económica Pro',45990,91980,'#1A1F3A')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="product-card featured fade-up" data-id="2" data-name="Confort Plus" data-price="68490" data-before="136980" style="transition-delay:0.1s;">
+      <div class="product-img" style="background:#FDF4E7;">
+        <div class="product-img-bg" style="background:linear-gradient(135deg,#FDF4E7 0%,#F5E6C8 100%);"></div>
+        <div class="product-mattress">
+          <div class="pm-top" style="background:#C9A84C;color:#1A1F3A;">Confort Plus</div>
+          <div class="pm-base" style="background:#9E7A2E;"></div>
+        </div>
+      </div>
+      <div class="featured-flag">Recomendado</div>
+      <div class="product-info">
+        <div class="product-name">Confort Plus</div>
+        <div class="product-desc">Tecnología viscoelástica con espuma memory foam. Adapta la temperatura corporal para un descanso profundo.</div>
+        <div class="product-price">
+          <span class="price-now">$68.490</span>
+          <span class="price-before">$136.980</span>
+          <span class="price-badge">-50%</span>
+        </div>
+        <button class="btn-add" onclick="addToCart(2,'Confort Plus',68490,136980,'#C9A84C')">Agregar al carrito</button>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" data-id="3" data-name="Sommier Completo" data-price="89990" data-before="179980" style="transition-delay:0.2s;">
+      <div class="product-img" style="background:#F0EDF8;">
+        <div class="product-img-bg" style="background:linear-gradient(135deg,#F0EDF8 0%,#E2DCF2 100%);"></div>
+        <div class="product-mattress">
+          <div class="pm-top" style="background:#534AB7;color:#FFFFFF;">Sommier</div>
+          <div class="pm-base" style="background:#3C3489;"></div>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-name">Sommier Completo</div>
+        <div class="product-desc">Colchón + base sommier incluida. Sistema resortes independientes con 400 espirales templados al frío.</div>
+        <div class="product-price">
+          <span class="price-now">$89.990</span>
+          <span class="price-before">$179.980</span>
+          <span class="price-badge">-50%</span>
+        </div>
+        <button class="btn-add" onclick="addToCart(3,'Sommier Completo',89990,179980,'#534AB7')">Agregar al carrito</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WAVE 2 -->
+<div class="wave">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 60" preserveAspectRatio="none" style="width:100%;height:60px;background:#F5F0E8;">
+    <path d="M0,0 L0,40 Q360,0 720,40 Q1080,80 1440,40 L1440,0 Z" fill="#F8F6F2"/>
+  </svg>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonios">
+  <div class="section-header">
+    <p class="section-eyebrow">Lo que dicen nuestros clientes</p>
+    <h2 class="section-title">Más de 2.400 familias<br>ya duermen mejor</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testi-card fade-up">
+      <div class="stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Llevamos dos meses con el Económica Pro y no puedo creer la diferencia. Mi espalda dejó de doler y me levanto descansada. Increíble para el precio que tiene.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#EEF2F8;color:#1A1F3A;">ML</div>
+        <div><div class="testi-name">Mariana L.</div><div class="testi-loc">Palermo, CABA</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-up" style="transition-delay:0.1s;">
+      <div class="stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">La entrega fue al otro día. Llegó embalado perfecto, lo desempaqué solo y en 20 minutos ya estaba armado. El colchón es exactamente lo que prometían.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#FDF4E7;color:#9E7A2E;">RP</div>
+        <div><div class="testi-name">Rodrigo P.</div><div class="testi-loc">Quilmes, GBA Sur</div></div>
+      </div>
+    </div>
+    <div class="testi-card fade-up" style="transition-delay:0.2s;">
+      <div class="stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Compré el Sommier Completo en cuotas. No esperaba semejante calidad por ese precio. Lo recomendé a toda la familia y tres ya compraron el suyo.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#F0EDF8;color:#534AB7;">CG</div>
+        <div><div class="testi-name">Claudia G.</div><div class="testi-loc">Morón, GBA Oeste</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</section> <section class="section" id="testimonios-video" style="background: var(--white); border-top: 1px solid rgba(26,31,58,0.06); position: relative; z-index: 2;">
+  <div class="section-header fade-up">
+    <p class="section-eyebrow">Experiencias Reales</p>
+    <h2 class="section-title">Historias de descanso en video</h2>
+    <p class="section-sub">Descubrí por qué miles de argentinos en todo el país eligen cambiar sus noches con SueñoSimple.</p>
+  </div>
+
+  <div class="products-grid"> 
+    <div class="product-card fade-up" style="cursor: default;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Mateo" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Mateo Fernández</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Mendoza</p>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" style="cursor: default; transition-delay: 0.1s;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Sofía" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Sofía Rodríguez</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Córdoba</p>
+      </div>
+    </div>
+
+    <div class="product-card fade-up" style="cursor: default; transition-delay: 0.2s;">
+      <div style="position: relative; width: 100%; padding-top: 56.25%; background: var(--navy); overflow: hidden;">
+        <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Testimonio Martín" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="product-info" style="text-align: center; padding: 24px;">
+        <div class="product-name" style="font-size: 18px; margin-bottom: 4px;">Martín Gómez</div>
+        <p class="product-desc" style="color: var(--gold); font-weight: 600; margin-bottom: 0; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em;">Buenos Aires</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calculator-section" id="calculadora">
+  <div class="section-header fade-up">
+    <p class="section-eyebrow">Calculá tu ahorro</p>
+    <h2 class="section-title">¿Cuánto ahorrás hoy?</h2>
+    <p class="section-sub">Mové los controles y mirá en tiempo real cuánto te quedás en el bolsillo.</p>
+  </div>
+  <div class="calculator-wrap fade-up">
+    <h3 class="calc-title">Tu calculadora de descuento</h3>
+    <p class="calc-sub">Configurá tu compra y descubrí el ahorro real.</p>
+
+    <div class="calc-row">
+      <div class="calc-label">Precio del colchón<span id="precio-display">$68.490</span></div>
+      <input type="range" id="precio-range" min="20000" max="180000" step="1000" value="68490">
+    </div>
+    <div class="calc-row">
+      <div class="calc-label">Cuotas seleccionadas<span id="cuotas-display">12 cuotas</span></div>
+      <input type="range" id="cuotas-range" min="1" max="18" step="1" value="12">
+    </div>
+
+    <div class="calc-result">
+      <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:8px;">Tu ahorro total con 50% OFF</div>
+      <div class="calc-savings" id="savings-amount">$34.245</div>
+      <div class="calc-savings-label">Precio final: <strong id="final-price">$34.245</strong> · Cuota de <strong id="cuota-price">$2.854</strong>/mes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────
+  SECCIÓN INCOMPLETA 1: FORMULARIO DE COMPRA
+  TODO: Completar validaciones, campo de dirección
+  de entrega y lógica de envío al backend.
+──────────────────────────────────────────────── -->
+<section class="incomplete-section form-section" id="contacto">
+  <div class="incomplete-overlay"></div>
+  <div class="section-header" style="position:relative;z-index:2;">
+    <div class="dev-badge">En desarrollo</div>
+    <p class="section-eyebrow">Finalizá tu compra</p>
+    <h2 class="section-title">Completá tus datos</h2>
+    <p class="section-sub">Completá el formulario y recibís tu colchón en 48 horas. Campo de dirección de entrega pendiente de implementación.</p>
+  </div>
+  <div class="form-wrap">
+    <div class="form-row">
+      <div class="form-field">
+        <label>Nombre</label>
+        <input type="text" placeholder="Tu nombre completo">
+      </div>
+      <div class="form-field">
+        <label>Teléfono</label>
+        <input type="tel" placeholder="+54 11 ....">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Email</label>
+      <input type="email" placeholder="tu@email.com">
+    </div>
+    <div class="form-field">
+      <label>Producto seleccionado</label>
+      <select>
+        <option>Económica Pro - $45.990</option>
+        <option selected>Confort Plus - $68.490</option>
+        <option>Sommier Completo - $89.990</option>
+      </select>
+    </div>
+    <!-- TODO: Implementar campo de dirección de entrega con autocompletado de Google Maps -->
+    <div class="form-field">
+      <label>Dirección de entrega</label>
+      <div class="form-todo">
+        📍 &nbsp;Integración con Google Maps pendiente
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Cuotas</label>
+      <select>
+        <option>1 pago</option>
+        <option>3 cuotas sin interés</option>
+        <option>6 cuotas sin interés</option>
+        <option selected>12 cuotas sin interés</option>
+        <option>18 cuotas sin interés</option>
+      </select>
+    </div>
+    <!-- TODO: Conectar botón con endpoint de procesamiento de pagos -->
+    <button class="btn-primary" style="width:100%;padding:16px;font-size:15px;text-align:center;border:none;cursor:pointer;" onclick="showToast('Procesamiento de pagos en desarrollo')">
+      Reservar con 50% OFF
+    </button>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────
+  SECCIÓN INCOMPLETA 2: MAPA DE COBERTURA
+  TODO: Integrar Google Maps API con zonas de
+  entrega marcadas y estimador de tiempo por CP.
+──────────────────────────────────────────────── -->
+<section class="incomplete-section map-section">
+  <div class="incomplete-overlay"></div>
+  <div class="section-header" style="position:relative;z-index:2;">
+    <div class="dev-badge">En desarrollo</div>
+    <p class="section-eyebrow">Zonas de entrega</p>
+    <h2 class="section-title">¿Llegamos a tu casa?</h2>
+    <p class="section-sub">Cobertura en toda la zona AMBA. Ingresá tu código postal para verificar disponibilidad y tiempo estimado.</p>
+  </div>
+  <div class="map-placeholder">
+    <div class="map-icon">🗺️</div>
+    <div style="font-size:16px;font-weight:600;color:#1A1F3A;">Mapa de cobertura</div>
+    <div class="map-label">Integración con Google Maps API pendiente.<br>Mostrar zonas AMBA con colores por tiempo de entrega.</div>
+    <div style="display:flex;gap:20px;margin-top:8px;font-size:12px;color:#9B9B8F;">
+      <span>🟢 24h - CABA</span>
+      <span>🟡 48h - GBA 1° cordón</span>
+      <span>🔴 72h - GBA 2° cordón</span>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────
+  SECCIÓN INCOMPLETA 3: SISTEMA DE RESEÑAS
+  TODO: Conectar con API de reseñas verificadas.
+  Permitir cargar foto del producto instalado.
+  Mostrar paginación y filtros por producto.
+──────────────────────────────────────────────── -->
+<section class="incomplete-section reviews-section">
+  <div class="incomplete-overlay"></div>
+  <div class="section-header" style="position:relative;z-index:2;">
+    <div class="dev-badge">En desarrollo</div>
+    <p class="section-eyebrow">Reseñas verificadas</p>
+    <h2 class="section-title">Contanos tu experiencia</h2>
+    <p class="section-sub">Sistema de carga de reseñas con foto en desarrollo. Por ahora podés dejarnos tu opinión por WhatsApp.</p>
+  </div>
+  <div class="reviews-todo" style="position:relative;z-index:2;">
+    <div class="star-row">
+      <span class="star-empty">☆</span><span class="star-empty">☆</span><span class="star-empty">☆</span><span class="star-empty">☆</span><span class="star-empty">☆</span>
+    </div>
+    <div style="font-size:18px;font-weight:600;color:#1A1F3A;">Sistema de reseñas con foto</div>
+    <div class="reviews-label">Permitir cargar imagen del colchón instalado, calificación por categoría (firmeza, entrega, precio) y moderación de reseñas verificadas. Paginación y filtros por modelo pendientes.</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+      <span style="background:rgba(201,168,76,0.1);color:#9E7A2E;font-size:12px;padding:6px 14px;border-radius:20px;font-weight:500;">Subir foto</span>
+      <span style="background:rgba(201,168,76,0.1);color:#9E7A2E;font-size:12px;padding:6px 14px;border-radius:20px;font-weight:500;">Filtrar por producto</span>
+      <span style="background:rgba(201,168,76,0.1);color:#9E7A2E;font-size:12px;padding:6px 14px;border-radius:20px;font-weight:500;">Moderación activa</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="logo"><img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="logo-img"></span>
+      <p class="footer-desc">Colchones de calidad real a precios accesibles. Dormir bien no debería ser un lujo.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#">Económica Pro</a></li>
+        <li><a href="#">Confort Plus</a></li>
+        <li><a href="#">Sommier Completo</a></li>
+        <li><a href="#">Almohadas</a></li>
+        <li><a href="#">Protectores</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Ayuda</h4>
+      <ul>
+        <li><a href="#">Cómo comprar</a></li>
+        <li><a href="#">Zonas de envío</a></li>
+        <li><a href="#">Cambios y devoluciones</a></li>
+        <li><a href="#">Garantía</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#">Quiénes somos</a></li>
+        <li><a href="#">Nuestras tiendas</a></li>
+        <li><a href="#">Trabaja con nosotros</a></li>
+        <li><a href="#">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 SueñoSimple. Todos los derechos reservados.</div>
+    <div class="footer-flag">Hecho en Argentina 🇦🇷</div>
+  </div>
+</footer>
+
+<!-- STICKY CTA -->
+<button class="sticky-cta" id="sticky-cta" onclick="document.getElementById('productos').scrollIntoView({behavior:'smooth'})">
+  Ver 50% OFF
+  <div class="cart-count" id="sticky-count">0</div>
+</button>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <div class="cart-title-h">Tu carrito</div>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body">
+    <div class="cart-empty" id="cart-empty">Tu carrito está vacío.<br>Agregá un colchón con 50% OFF.</div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cart-total-price">$0</span>
+    </div>
+    <div class="cart-savings-note" id="cart-savings-info"></div>
+    <button class="btn-checkout" onclick="showToast('Checkout en desarrollo')">Finalizar compra</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toast-msg">Producto agregado</span>
+</div>
+
+<script>
+  // ─── COUNTDOWN ───
+  function updateCountdown() {
+    const now = new Date();
+    const target = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+    const diff = target - now;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('t-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('t-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('t-s').textContent = String(s).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ─── SCROLL EFFECTS ───
+  const stickyCta = document.getElementById('sticky-cta');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) stickyCta.classList.add('visible');
+    else stickyCta.classList.remove('visible');
+  });
+
+  // ─── CART ───
+  let cart = [];
+
+  function addToCart(id, name, price, before, color) {
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ id, name, price, before, color, qty: 1 });
+    }
+    renderCart();
+    openCart();
+    showToast(name + ' agregado al carrito');
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(i => i.id !== id);
+    renderCart();
+  }
+
+  function renderCart() {
+    const body = document.getElementById('cart-body');
+    const footer = document.getElementById('cart-footer');
+    const empty = document.getElementById('cart-empty');
+    const count = cart.reduce((a,i) => a + i.qty, 0);
+    document.getElementById('sticky-count').textContent = count;
+
+    if (cart.length === 0) {
+      empty.style.display = 'block';
+      footer.style.display = 'none';
+      body.innerHTML = '';
+      body.appendChild(empty);
+      return;
+    }
+
+    empty.style.display = 'none';
+    footer.style.display = 'block';
+
+    body.innerHTML = '';
+    let total = 0;
+    let totalSaved = 0;
+
+    cart.forEach(item => {
+      total += item.price * item.qty;
+      totalSaved += (item.before - item.price) * item.qty;
+      const el = document.createElement('div');
+      el.className = 'cart-item';
+      el.innerHTML = `
+        <div class="cart-item-img" style="background:${item.color}20;">
+          <div style="width:100%;height:30px;background:${item.color};border-radius:4px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:9px;font-weight:700;color:white;letter-spacing:0.05em;">${item.name.split(' ')[0].toUpperCase()}</span>
+          </div>
+        </div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${item.name} ${item.qty > 1 ? 'x' + item.qty : ''}</div>
+          <div class="cart-item-price">$${(item.price * item.qty).toLocaleString('es-AR')}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+      `;
+      body.appendChild(el);
+    });
+
+    document.getElementById('cart-total-price').textContent = '$' + total.toLocaleString('es-AR');
+    document.getElementById('cart-savings-info').textContent = 'Ahorrás $' + totalSaved.toLocaleString('es-AR') + ' con el 50% OFF';
+  }
+
+  function openCart() {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCart() {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ─── CALCULATOR ───
+  const precioRange = document.getElementById('precio-range');
+  const cuotasRange = document.getElementById('cuotas-range');
+
+  function updateCalc() {
+    const precio = parseInt(precioRange.value);
+    const cuotas = parseInt(cuotasRange.value);
+    const descuento = Math.round(precio * 0.5);
+    const final = Math.round(precio * 0.5);
+    const cuota = Math.round(final / cuotas);
+
+    document.getElementById('precio-display').textContent = '$' + precio.toLocaleString('es-AR');
+    document.getElementById('cuotas-display').textContent = cuotas === 1 ? '1 pago' : cuotas + ' cuotas';
+    document.getElementById('savings-amount').textContent = '$' + descuento.toLocaleString('es-AR');
+    document.getElementById('final-price').textContent = '$' + final.toLocaleString('es-AR');
+    document.getElementById('cuota-price').textContent = '$' + cuota.toLocaleString('es-AR');
+  }
+
+  precioRange.addEventListener('input', updateCalc);
+  cuotasRange.addEventListener('input', updateCalc);
+  updateCalc();
+
+  // ─── TOAST ───
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  // ─── PRODUCT CARD ANIMATION ───
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 8;
+      card.style.transform = `translateY(-6px) rotateX(${-y}deg) rotateY(${x}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform 0.4s ease';
+      setTimeout(() => card.style.transition = '', 400);
+    });
+  });
+
+  // ─── INIT CART RENDER ───
+  renderCart();
+</script>
+</body>
+</html>

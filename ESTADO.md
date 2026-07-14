@@ -17,11 +17,11 @@ Repositorio que centraliza las landing pages estáticas (HTML/CSS) de cada clien
 
 | Campo | Valor |
 |---|---|
-| Rama actual | `main` |
+| Rama actual | `dev` |
 | Rama por defecto | `main` |
 | Cambios sin commitear | Ninguno (working tree limpio) |
-| Sincronización | Al día con `origin/main` |
-| Último commit | `3628344 — Add files via upload` |
+| Sincronización | Al día con `origin/dev` |
+| Último commit | `8eb1ffa — Merge pull request #4 from Tadeo-bit/feature/landing-mundial` |
 
 ## Estado funcional
 
@@ -110,3 +110,74 @@ php -S localhost:8000 -t admin
 - Validacion HTTP en admin:
   - `landings.php?cliente=SueñoSimple` muestra solo landings de SueñoSimple.
   - `panel.php?carpeta=suenosimple` responde 200 y carga el panel correcto.
+
+---
+
+### 2026-06-25 — Correcciones finales del admin PHP (commit `bfe4fc9`)
+
+**Cambios realizados**
+
+- `admin/landings.php`: botón Preview corregido a `/api/landings/{id}/preview`; navegación de retorno cambiada a `← Inicio → index.php`.
+- `admin/clientes.php`: navegación de retorno cambiada a `← Inicio → index.php`.
+- `admin/panel.php`: reescritura completa. Acepta `?carpeta=` y `?file=`. Reescribe rutas de CSS vía `assets.php`. Inyecta `MutationObserver` para parchear links `.html` generados asincrónamente.
+- `admin/assets.php`: nuevo archivo. Sirve archivos estáticos fuera del docroot (`css/styles.css`) con validación de path traversal.
+
+**Verificaciones**
+
+- `php -l` sobre todos los archivos PHP: sin errores.
+- Preview de landing abre URL correcta en el CRM.
+- Panel de cliente carga con CSS correcto y links de landing funcionales.
+
+---
+
+### 2026-06-25/26 — `suenosimple/mundial-2026.html` — Integración CRM + WhatsApp (PR #4)
+
+**Cambios mergeados desde `feature/landing-mundial` (commit `22f515d`, PR #4)**
+
+- Integración asíncrona con la API del CRM para registro de leads.
+- Mapeo de campos del formulario al endpoint `POST /api/landings/{id}/leads`.
+- Lógica de redirección a WhatsApp tras registro exitoso.
+- 110 inserciones / 65 eliminaciones en `suenosimple/mundial-2026.html`.
+
+**Estado Git**
+
+- Rama `dev` local sincronizada con `origin/dev` (fast-forward a commit `8eb1ffa`).
+
+---
+
+### 2026-07-01 — Separación público/admin + rediseño `mundial-2026.html`
+
+**Diferenciación página pública vs panel admin**
+
+- `index.html`: eliminado el link "Panel Admin →" del header para que los clientes no accedan directamente al admin. Botón "Ver panel" actualizado a `/${folder}/`. Título cambiado a "Genius Landings".
+- `admin/auth.php`: nuevo archivo. Guard de acceso basado en `DOCUMENT_ROOT`: solo permite cargar el admin si el servidor fue iniciado con `-t admin` (el docroot termina en `/admin`). De lo contrario, responde 403 y redirige a `http://localhost:8000/`.
+- `admin/login.php` y `admin/logout.php`: archivos creados (sin uso activo aún).
+- `admin/index.php`, `admin/landings.php`, `admin/panel.php`, `admin/clientes.php`, `admin/assets.php`: agregado `require_once 'auth.php'` al inicio de cada archivo.
+
+**Rediseño completo de `suenosimple/mundial-2026.html`**
+
+- Diseño blanco/azul (`#2563eb`) consistente con `economica-pro.html`. Se eliminaron los estilos mundialistas anteriores (navy/celeste/dorado).
+- Secciones implementadas: back bar, countdown strip (sticky, timer JS), nav, hero (grid 2 columnas + cards animadas), features strip, match sale section, products (3 cards con precio tachado y cuotas), testimonials, trust strip, logistics, form CRM (`LANDING_ID=6`), footer, floating WhatsApp.
+- Corregida la ruta del logo: `assets/ss_logo.jpeg` → `../assets/ss_logo.jpeg` (el archivo existe en `Genius-Landings/assets/`, no en `suenosimple/assets/`). Aplicado en nav y footer.
+
+**Estado Git**
+
+- Cambios en `dev`, pendientes de commit.
+
+---
+
+### 2026-07-03 — Fix cambio de estado de landings en admin (rama `feat/modificarEstadosGestorLandings`)
+
+**Cambio realizado**
+
+- `admin/api.php`: función `update_landing_status` corregida.
+  - Método: `PUT` → `PATCH`.
+  - URL: `/api/landings/{id}` → `/api/landings/{id}/status`.
+
+**Motivo**
+
+El endpoint `PUT /api/landings/{id}` no existía en Genius-CRM-main. El admin llamaba a una ruta inexistente al intentar cambiar el estado de una landing, obteniendo siempre un error de conexión. El endpoint correcto `PATCH /api/landings/{id}/status` fue creado en paralelo en Genius-CRM-main.
+
+**Estado Git**
+
+- Cambios en rama `feat/modificarEstadosGestorLandings`, pendientes de commit y merge.

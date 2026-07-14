@@ -31,7 +31,11 @@ function normalize_text(string $value): string {
 }
 
 function api_get(string $url): array {
-    $context  = stream_context_create(['http' => ['timeout' => 3]]);
+    $real_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $context  = stream_context_create(['http' => [
+        'timeout' => 3,
+        'header' => "X-Forwarded-For: $real_ip\r\n"
+    ]]);
     $response = @file_get_contents($url, false, $context);
     if ($response === false) return [];
     return json_decode($response, true) ?? [];
@@ -75,6 +79,52 @@ function canonical_client_name(string $client_name): string {
     return trim($client_name);
 }
 
+function get_landing_statuses(): array {
+    return [
+        ['value' => 'active',   'label' => 'Activa',   'class' => 'badge-active'],
+        ['value' => 'draft',    'label' => 'Borrador', 'class' => 'badge-draft'],
+        ['value' => 'inactive', 'label' => 'Inactiva', 'class' => 'badge-inactive'],
+    ];
+}
+
+function update_landing_status(int $id, string $new_status): array {
+    $payload = json_encode(['status' => $new_status]);
+    $url = LANDING_CRM_URL . '/api/landings/' . $id . '/status';
+    $real_ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+    $context = stream_context_create([
+        'http' => [
+            'method'  => 'PATCH',
+            'header'  => "Content-Type: application/json\r\nContent-Length: " . strlen($payload) . "\r\nX-Forwarded-For: $real_ip",
+            'content' => $payload,
+            'timeout' => 4,
+            'ignore_errors' => true,
+        ]
+    ]);
+
+    $response = @file_get_contents($url, false, $context);
+    $http_code = 0;
+    foreach ($http_response_header ?? [] as $h) {
+        if (preg_match('#HTTP/\S+\s+(\d+)#', $h, $m)) {
+            $http_code = (int)$m[1];
+        }
+    }
+
+    if ($response !== false && $http_code === 200) {
+        return ['success' => true, 'message' => 'Estado actualizado correctamente.'];
+    }
+
+    $error_msg = 'Error al actualizar el estado';
+    if ($response !== false) {
+        $decoded = json_decode($response, true);
+        $error_msg .= ': ' . ($decoded['error'] ?? "HTTP $http_code");
+    } else {
+        $error_msg .= ': no se pudo conectar con el CRM (HTTP ' . $http_code . ')';
+    }
+
+    return ['success' => false, 'message' => $error_msg];
+}
+
 function build_clients_catalog(array $campaigns, array $landings): array {
     $catalog = [];
 
@@ -109,4 +159,22 @@ function build_clients_catalog(array $campaigns, array $landings): array {
     }
 
     return $catalog;
+}
+
+function get_campaign_history(array $filters = []): array {
+    $url = BUDGET_MANAGER_URL . '/api/campaigns/history';
+    if (!empty($filters)) $url .= '?' . http_build_query($filters);
+    return api_get($url);
+}
+
+function get_landing_history(array $filters = []): array {
+    $url = LANDING_CRM_URL . '/api/history';
+    if (!empty($filters)) $url .= '?' . http_build_query($filters);
+    return api_get($url);
+}
+
+function get_all_history(array $filters = []): array {
+    $budget = get_campaign_history($filters);
+    $crm    = get_landing_history($filters);
+    return array_merge($budget, $crm);
 }

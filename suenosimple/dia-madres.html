@@ -3,80 +3,457 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prototipo - Landing Día de la Madre (SueñoSimple)</title>
+  <title>Especial Día de la Madre - SueñoSimple</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Estilos estructurales básicos e invisibles para la performance */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: sans-serif; color: #0f172a; background: #ffffff; line-height: 1.5; }
+    /* --- VARIABLES DE DISEÑO (Paleta de Campaña Solicitada) --- */
+    :root {
+      --primary: #6f25c5;       /* Púrpura Vibrante Principal */
+      --primary-hover: #9c52f2; /* Púrpura Medio para Hover */
+      --accent-light: #d88eff;  /* Púrpura Pastel para Badges/Fondos suaves */
+      --bg-light: #f8fafc;      /* Fondo grisáceo suave inspirado en las tarjetas de campaña */
+      --text-dark: #0f172a;     /* El color estructural del prototipo */
+      --white: #ffffff;
+      --error: #dc2626;         /* Rojo de validación del prototipo */
+      --success-bg: #dcfce7;    /* Fondos de éxito del prototipo */
+      --success-text: #15803d;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --shadow: 0 10px 25px rgba(111, 37, 197, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    /* --- RESET & ESTILOS BASE --- */
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
     
-    /* BARRA DE NAVEGACIÓN Y RETORNO OBLIGATORIA */
-    .nav-back-bar {
+    body { 
+      font-family: var(--font-body); 
+      color: var(--text-dark); 
+      background: var(--white); 
+      line-height: 1.6; 
+    }
+
+    /* --- 1. DIV BACK-BAR (Escape Obligatorio Elegante) --- */
+    .back-bar {
       background: #f1f5f9;
-      padding: 12px 24px;
-      border-bottom: 2px solid #cbd5e1;
+      padding: 10px 24px;
+      border-bottom: 1px solid #cbd5e1;
+      text-align: right;
+    }
+    
+    .btn-back {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: bold;
+      transition: var(--transition);
+    }
+    
+    .btn-back:hover { 
+      color: var(--primary-hover);
+      text-decoration: underline; 
+    }
+
+    /* --- NAVBAR PRINCIPAL CON NAVEGACIÓN INTERNA --- */
+    .navbar {
+      background: var(--white);
+      padding: 15px 24px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .btn-back {
-      display: inline-block;
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .btn-back:hover { text-decoration: underline; }
 
-    /* SECCIONES DEL PROTOTIPO */
-    .container { max-width: 800px; margin: 0 auto; padding: 24px; }
-    header, section, footer { margin-bottom: 40px; padding: 20px; border: 1px dashed #94a3b8; }
+    .logo-container img {
+      height: 45px;
+      display: block;
+      object-fit: contain;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    /* Botón de WhatsApp Característico Verde */
+    .btn-whatsapp {
+      background: #25d366;
+      color: var(--white) !important;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+    }
+
+    .btn-whatsapp:hover {
+      background: #20ba5a;
+      transform: translateY(-1px);
+    }
+
+    /* --- CONTENEDOR GENERAL --- */
+    .container { 
+      max-width: 1140px; 
+      margin: 0 auto; 
+      padding: 40px 24px; 
+    }
+
+    /* --- 2. HERO SECTION (Layout de Colores e Imagen Orgánica) --- */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 60px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .hero-text h1 {
+      font-family: var(--font-heading);
+      font-size: 2.8rem;
+      line-height: 1.2;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      color: #475569;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    /* Contenedor de Imagen con Máscara Fluida Orgánica (Inspirada en pag2.png) */
+    .hero-image-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .hero-image-fluid {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      /* Curvas fluidas asimétricas nativas por CSS */
+      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      box-shadow: 0 15px 35px rgba(111, 37, 197, 0.15);
+      background: var(--accent-light);
+    }
+
+    /* --- BLOQUES DE SECCIÓN COMPARTIDOS --- */
+    .section-card {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 35px;
+      margin-bottom: 40px;
+      border: 1px solid #e2e8f0;
+      box-shadow: var(--shadow);
+    }
+
+    .section-card h2 {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+    }
+
+    /* --- 3. FORMULARIO DE CAPTACIÓN (Estilo pag7.png) --- */
+    .form-card {
+      background: var(--bg-light); /* Fondo grisáceo sutil */
+      border: 1px solid #e2e8f0;
+    }
+
+    .form-group { 
+      margin-bottom: 20px; 
+    }
     
-    /* FORMULARIO DE CAPTACIÓN */
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 4px; font-weight: 600; }
-    .form-group input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
-    .btn-submit, .btn-buy { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .btn-buy { background: #16a34a; text-decoration: none; display: inline-block; }
+    .form-group label { 
+      display: block; 
+      margin-bottom: 6px; 
+      font-weight: 600; 
+      font-size: 0.9rem;
+    }
     
-    /* FEEDBACK VISUAL INSTANTÁNEO */
-    .hidden { display: none; }
-    .feedback-success { background: #dcfce7; color: #15803d; padding: 16px; margin-top: 16px; border-radius: 4px; border: 1px solid #bbf7d0; }
-    .error-msg { color: #dc2626; font-size: 0.85rem; margin-top: 4px; }
+    .form-group input { 
+      width: 100%; 
+      padding: 12px 16px; 
+      border: 1px solid #cbd5e1; 
+      border-radius: 8px; 
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(111, 37, 197, 0.1);
+    }
+    
+    .btn-submit { 
+      background: var(--primary); 
+      color: var(--white); 
+      padding: 14px 28px; 
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-weight: bold; 
+      font-size: 1rem;
+      font-family: var(--font-body);
+      width: 100%;
+      box-shadow: 0 5px 15px rgba(111, 37, 197, 0.2);
+      transition: var(--transition);
+    }
+    
+    .btn-submit:hover:not(:disabled) { 
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+    
+    /* FEEDBACKS Y ERRORES DEL PROTOTIPO */
+    .hidden { 
+      display: none !important; 
+    }
+    
+    .feedback-success { 
+      background: var(--success-bg); 
+      color: var(--success-text); 
+      padding: 16px; 
+      margin-top: 20px; 
+      border-radius: 8px; 
+      border: 1px solid #bbf7d0; 
+      font-size: 0.95rem;
+    }
+    
+    .error-msg { 
+      color: var(--error); 
+      font-size: 0.85rem; 
+      margin-top: 6px; 
+      font-weight: 500;
+    }
+
+    /* --- 4. VITRINA DE CONVERSIÓN (Estilo pag5.png) --- */
+    .price-box {
+      margin: 20px 0; 
+      padding: 24px; 
+      background: var(--bg-light); 
+      border-radius: 12px;
+      border-left: 5px solid var(--primary);
+    }
+
+    .price-box h3 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .price-box p {
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .price-box p span {
+      color: var(--primary-hover);
+    }
+    
+    .btn-buy { 
+      background: var(--primary); 
+      color: var(--white); 
+      padding: 14px 28px; 
+      text-decoration: none; 
+      display: inline-block; 
+      border-radius: 8px; 
+      font-weight: bold; 
+      font-size: 1rem;
+      box-shadow: 0 5px 15px rgba(111, 37, 197, 0.2);
+      transition: var(--transition);
+    }
+
+    .btn-buy:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* --- 5. FOOTER AVANZADO SOLICITADO --- */
+    footer {
+      background: #1e1b4b; /* Azul/Púrpura oscuro ultra premium */
+      color: #cbd5e1;
+      padding: 60px 24px 20px 24px;
+      font-size: 0.9rem;
+      border-top: 4px solid var(--primary);
+    }
+
+    .footer-grid {
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #334155;
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+      }
+    }
+
+    .footer-logo {
+      height: 40px;
+      margin-bottom: 15px;
+      object-fit: contain;
+    }
+
+    .footer-desc {
+      line-height: 1.5;
+      margin-bottom: 20px;
+      color: #94a3b8;
+    }
+
+    .footer-seals {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer-seal {
+      background: #334155;
+      color: var(--white);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .footer-col h4 {
+      color: var(--white);
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 10px;
+    }
+
+    .footer-col ul li a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--accent-light);
+    }
+
+    .footer-bottom {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .footer-copy {
+      color: #64748b;
+    }
+
+    .footer-flag {
+      font-weight: 600;
+      color: #38bdf8;
+    }
   </style>
 </head>
 <body>
 
-  <nav class="nav-back-bar">
-    <span class="logo-placeholder">[Logo Provisorio SueñoSimple]</span>
+  <div class="back-bar">
     <a href="index.html" class="btn-back" id="btn-retorno">← Volver al sitio oficial de SueñoSimple</a>
+  </div>
+
+  <nav class="navbar">
+    <div class="logo-container">
+      <img src="../assets/ss_logo.jpeg" alt="SueñoSimple">
+    </div>
+    <ul class="nav-links">
+      <li><a href="#seccion-oferta">Económica Pro</a></li>
+      <li><a href="#seccion-formulario">Registrarme</a></li>
+      <li><a href="https://wa.me/5491123456789" class="btn-whatsapp" target="_blank">WhatsApp</a></li>
+    </ul>
   </nav>
 
+  <main>
   <div class="container">
 
-    <header>
-      <h1>Lorem Ipsum Día de la Madre</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      <img src="https://via.placeholder.com/600x200" alt="Foto genérica hero" style="width:100%; max-width:100%; height:auto; margin-top:15px;">
+    <header class="hero-grid">
+      <div class="hero-text">
+        <h1>El descanso perfecto para quien te dio todo</h1>
+        <p>Este Día de la Madre, regalale a mamá la tecnología de sueño premium que se merece. Ofertas exclusivas por tiempo limitado y financiación a su medida.</p>
+        <a href="#seccion-formulario" class="btn-buy">Reservar Oferta</a>
+      </div>
+      <div class="hero-image-container">
+        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=600&q=80" alt="Dormitorio Premium SueñoSimple" class="hero-image-fluid">
+      </div>
     </header>
 
-    <section id="seccion-formulario">
+    <section id="seccion-formulario" class="section-card form-card">
       <h2>Registro Acceso Anticipado</h2>
-      <p style="margin-bottom: 15px;">Lorem ipsum dolor sit amet tempor vinculum.</p>
+      <p style="margin-bottom: 20px; color: #475569;">Dejanos tus datos y un asesor especializado la ayudará a elegir el colchón ideal.</p>
       
       <form id="form-madre" novalidate>
         <div class="form-group">
-          <label for="nombre">Nombre:</label>
+          <label for="nombre">Nombre completo:</label>
           <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre completo">
           <div id="error-nombre" class="error-msg hidden">El nombre es obligatorio.</div>
         </div>
         
         <div class="form-group">
-          <label for="mail">Mail:</label>
+          <label for="mail">Correo electrónico:</label>
           <input type="email" id="mail" name="mail" placeholder="ejemplo@correo.com">
           <div id="error-mail" class="error-msg hidden">Ingrese un correo válido con formato @.</div>
         </div>
         
         <div class="form-group">
-          <label for="celular">Celular:</label>
+          <label for="celular">Teléfono Celular:</label>
           <input type="tel" id="celular" name="celular" placeholder="Ej: 1123456789">
           <div id="error-celular" class="error-msg hidden">El celular es obligatorio.</div>
         </div>
@@ -84,26 +461,66 @@
         <button type="submit" class="btn-submit">Enviar Datos</button>
       </form>
 
-      <div id="feedback-visual" class="feedback-success hidden">
-        <strong>¡Datos recibidos correctamente!</strong> Tu registro para el Día de la Madre ha sido procesado.
-      </div>
+      <div id="feedback-visual" class="feedback-success hidden"></div>
     </section>
 
-    <section>
+    <section id="seccion-oferta" class="section-card">
       <h2>Línea Económica Pro</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Espacio reservado para las especificaciones del colchón.</p>
-      <div style="margin: 15px 0; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0;">
-        <h3>Precio Especial: $XX.XXX</h3>
-        <p>¡Hasta 12 cuotas sin interés!</p>
+      <p style="color: #475569;">Diseñado con un sistema combinado de resortes de alta resistencia y mantas de espuma soft que garantizan el soporte anatómico perfecto para cuidar su columna.</p>
+      
+      <div class="price-box">
+        <h3>Precio Especial: $349.999</h3>
+        <p>¡Hasta <span>12 cuotas sin interés</span> fijas!</p>
       </div>
       <a href="https://example.com/test-tracking-compra" target="_blank" class="btn-buy" id="btn-compra-trackeable">Comprar Producto</a>
     </section>
 
-    <footer>
-      <p>&copy; 2026 SueñoSimple. Prototipo de Validación Técnica.</p>
-    </footer>
-
   </div>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <img src="../assets/ss_logo.jpeg" alt="SueñoSimple" class="footer-logo">
+        <p class="footer-desc">Colchones de calidad real a precios accesibles. Dormir bien no debería ser un lujo.</p>
+        <div class="footer-seals">
+          <span class="footer-seal">🏷️ Precio honesto</span>
+          <span class="footer-seal">🛡️ Garantía 5 años</span>
+          <span class="footer-seal">🔄 Cambio fácil</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Productos</h4>
+        <ul>
+          <li><a href="#seccion-oferta">Económica Pro</a></li>
+          <li><a href="#">Confort Plus</a></li>
+          <li><a href="#">Sommier Completo</a></li>
+          <li><a href="#">Almohadas</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Ayuda</h4>
+        <ul>
+          <li><a href="#">Cómo comprar</a></li>
+          <li><a href="#">Zonas de envío</a></li>
+          <li><a href="#">Cambios y devoluciones</a></li>
+          <li><a href="#">Garantía</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Política de privacidad</a></li>
+          <li><a href="#">Términos y condiciones</a></li>
+          <li><a href="#">Política de cambios</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 SueñoSimple. Todos los derechos reservados.</div>
+      <div class="footer-flag">Vamos Argentina 🇦🇷</div>
+    </div>
+  </footer>
 
   <script>
   const formulario = document.getElementById('form-madre');
@@ -127,7 +544,7 @@
 
     let tieneErrores = false;
 
-    // 3. Validaciones de Frontend obligatorias
+    // 3. Validaciones de Frontend obligatorias (Solo nombre y mail según el contrato)
     if (nombre === '') {
       document.getElementById('error-nombre').classList.remove('hidden');
       tieneErrores = true;
@@ -136,6 +553,8 @@
       document.getElementById('error-mail').classList.remove('hidden');
       tieneErrores = true;
     }
+
+    // Celular obligatorio (requerido para contacto por WhatsApp)
     if (celular === '') {
       document.getElementById('error-celular').classList.remove('hidden');
       tieneErrores = true;
@@ -169,9 +588,9 @@
       });
 
       if (response.ok) {
-        // ÉXITO: Mostramos feedback verde y limpiamos formulario
+        // ÉXITO: Copy emocional y de marca humano solicitado para la fase final
         feedback.className = 'feedback-success';
-        feedback.innerHTML = '<strong>¡Gracias por contactarte!</strong> Sus datos se recibieron correctamente de forma asíncrona.';
+        feedback.innerHTML = '<strong>¡Tu solicitud fue recibida con éxito!</strong> Un asesor experto en descanso se comunicará con vos para ayudarte a elegir el regalo perfecto para mamá. ¡Gracias por confiar en SueñoSimple!';
         feedback.classList.remove('hidden');
         formulario.reset();
       } else {

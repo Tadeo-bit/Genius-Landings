@@ -73,7 +73,8 @@
         'lanzamiento economica pro 2026': 'economica-pro.html',
         'captacion leads newsletter suenosimple': 'mundial-2026.html',
         'mundial 2026 suenosimple': 'mundial-2026.html',
-        'dia de las madres suenosimple': 'dia-madres.html'
+        'dia de las madres suenosimple': 'dia-madres.html',
+        '9 de julio suenosimple': '9-julio.html'
       };
       return routes[key] || '#';
     }
@@ -91,25 +92,28 @@
         const allLandings = await response.json();
         const landings = allLandings.filter(item => normalize(item.client) === CLIENT_KEY);
 
-        if (landings.length === 0) {
-          status.textContent = 'No hay landings disponibles para este cliente en la API.';
-          return;
+        let html = '';
+
+        if (landings.length > 0) {
+          html += landings.map(item => `
+            <div class="landing-card">
+              <div class="landing-card-top">
+                <div>
+                  <h3>${item.name || 'Sin nombre'}</h3>
+                  <span class="landing-type">ID API: ${item.id ?? '—'}</span>
+                </div>
+                <span class="badge ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+              </div>
+              <p class="landing-date">Fuente: Landing CRM</p>
+              <a href="${landingHref(item.name || '')}" class="btn btn-outline">Ver landing</a>
+            </div>
+          `).join('');
         }
 
-        grid.innerHTML = landings.map(item => `
-          <div class="landing-card">
-            <div class="landing-card-top">
-              <div>
-                <h3>${item.name || 'Sin nombre'}</h3>
-                <span class="landing-type">ID API: ${item.id ?? '—'}</span>
-              </div>
-              <span class="badge ${statusClass(item.status)}">${statusLabel(item.status)}</span>
-            </div>
-            <p class="landing-date">Fuente: Landing CRM</p>
-            <a href="${landingHref(item.name || '')}" class="btn btn-outline">Ver landing</a>
-          </div>
-        `).join('');
+        html += `
+        `;
 
+        grid.innerHTML = html;
         status.style.display = 'none';
         grid.style.display = 'grid';
       } catch (error) {
